@@ -47,7 +47,7 @@ function DetailSellItem() {
     return (
         <div>
             <div className="divv">
-                <div style={{ textAlign: "center" }}><h1>Thêm đơn bán</h1></div>
+                <div style={{ textAlign: "center" }}><h1>Chi tiết đơn bán</h1></div>
             </div>
             <Container>
                 <div className="mx-auto col text-center scroll-container" >
@@ -68,7 +68,7 @@ function DetailSellItem() {
                                     </div>
                                     <div>
                                         <Link to="/">
-                                            <button className="btn outline btn-outline-primary">Xóa</button>
+                                            <button className="btn outline btn-outline-danger">Xóa</button>
                                         </Link>
                                     </div>
 
@@ -88,8 +88,8 @@ function DetailSellItem() {
                                             <label htmlFor="floatingInput" className="pr-3">Loại sản phẩm</label>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="text" className="form-control" id="floatingInput" placeholder="Vị trí bán" />
-                                            <label htmlFor="floatingInput" className="pr-3">Vị trí bán</label>
+                                            <input type="text" className="form-control" id="floatingInput" placeholder="Khu vực" />
+                                            <label htmlFor="floatingInput" className="pr-3">Khu vực</label>
                                         </div>
                                         <div className="form-floating mb-3">
                                             <input type="text" className="form-control" id="floatingInput" placeholder="Số điện thoại" />
@@ -100,11 +100,11 @@ function DetailSellItem() {
                             </div>
                             <div className="mt-3 anh">
                                 <input ref={ref} className="btn btn-outline-info" type="file" multiple accept="image/*" onChange={onImageChange} />
-                                <div className="slide-container .react-slideshow-wrapper" style={{height:"550px"}}>
+                                <div className="slide-container .react-slideshow-wrapper">
                                     <Slide ref={slideRef} {...properties}>
                                         {slideImages.map((each, index) => (
                                             <div key={index} className="each-slide" >
-                                                <img style={{ width: "375px", height: "500px" }} src={each} alt="sample" />
+                                                <img className="lazy img-thumbnail" src={each} alt="sample" />
                                             </div>
                                         ))}
                                     </Slide>
@@ -148,7 +148,7 @@ function DetailSellItem() {
 
                         <div className="mt-3">
                             <div className="form-group">
-                                <label htmlFor="exampleFormControlTextarea1">Example textarea</label>
+                                <label htmlFor="exampleFormControlTextarea1">Chi tiết sản phẩm:</label>
                                 <textarea
                                     maxLength={5000}
                                     placeholder="nội dung chi tiết sản phẩm"

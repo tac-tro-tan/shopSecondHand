@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { Container } from "react-bootstrap";
 import "./productDetails.css";
@@ -36,11 +37,12 @@ function ProductDetails() {
             caption: 'ảnh 1'
         },
         {
-            url: 'http://dummyimage.com/154x183.png/5fa2dd/ffffff',
+            url: 'https://www.elle.vn/wp-content/uploads/2017/07/25/hinh-anh-dep-1.jpg',
             caption: 'ảnh 1'
         },
+
         {
-            url: 'http://dummyimage.com/154x183.png/5fa2dd/ffffff',
+            url: 'https://i.pinimg.com/736x/56/86/03/568603cbd1860c67bf8f6776cbe7f885.jpg',
             caption: 'ảnh 1'
         },
     ];
@@ -53,25 +55,41 @@ function ProductDetails() {
                         <div className="d-flex justify-content-between w-100 mt-3">
 
                             <div className="d-flex flex-column align-items-start">
-                                <div>
-                                    <Link to="/">
-                                        <button className="btn outline btn-outline-primary">nút back</button>
-                                    </Link>
+                                <div className="d-flex">
+                                    <div>
+                                        <Link to="/">
+                                            <button className="btn outline btn-outline-primary me-4">nút back</button>
+                                        </Link>
+                                    </div>
+                                    <div>
+                                        <Link to="/">
+                                            <button className="btn outline btn-outline-primary">Cửa hàng</button>
+                                        </Link>
+                                    </div>
                                 </div>
+
                                 <div className="p-1"><h3>Quạt 5 năm</h3></div>
                                 <div className="p-1"><span className="border border-info rounded p-1">giá:50k</span></div>
                                 <div className="p-1"><span className="border border-info rounded p-1">sdt:0123123123</span></div>
                                 <div className="p-1"><span className="border border-info rounded p-1">thể loại:đồ điện tử</span></div>
-                                <div className="p-1"><span className="border border-info rounded p-1">vị trí bán: Hòa Khánh-Liên Chiểu-Đà nẵng</span></div>
+                                <div className="p-1"><span className="border border-info rounded p-1">Khu vực: Hòa Khánh-Liên Chiểu-Đà nẵng</span></div>
+                                <div className="p-1">
+                                    <Link to="/">
+                                        <button className="btn outline btn-outline-primary">Chat với người bán</button>
+                                    </Link>
+                                </div>
+                                <div className="p-1">
+                                    <Link to="/">
+                                        <button className="btn outline btn-outline-primary">Thêm vào giỏ hàng</button>
+                                    </Link>
+                                </div>
                             </div>
-                            <div className="mt-3 anh">
+                            <div className="anh mt-3">
                                 <div className="slide-container" >
                                     <Slide>
                                         {slideImages.map((slideImage, index) => (
-                                            <div className="each-slide d-flex flex-column" key={index}>
-                                                <span>{slideImage.caption}</span>
-                                                <img className="lazy img-thumbnail" src={slideImage.url} alt="sample" />
-
+                                            <div className="each-slide d-flex flex-column img-responsive-wrap " key={index}>
+                                                <img style={{ width: "100%", height: "100%" }} className="lazy img-thumbnail img-inner" src={slideImage.url} alt="sample" />
                                             </div>
                                         ))}
                                     </Slide>

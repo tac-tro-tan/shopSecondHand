@@ -1,3 +1,4 @@
+// @ts-nocheck
 import './App.css';
 import Footer from './components/footer/footer';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -13,6 +14,8 @@ import Sell from './components/user/sell/sell';
 import AddSellItem from './components/user/sell/addSell/addSellItem';
 import 'react-slideshow-image/dist/styles.css'
 import DetailSellItem from './components/user/sell/detailSell/detailSellItem';
+import MyCart from './components/user/myCart/myCart';
+import FeedBack from './components/user/feedBack/feedBack';
 
 function App() {
   return (<>
@@ -29,6 +32,8 @@ function App() {
             <Route exact path="/danhsachbanhang" element={<Sell />} />
             <Route exact path="/themdonban" element={<AddSellItem />} />
             <Route exact path="/chitietdonban" element={<DetailSellItem />} />
+            <Route exact path="/giohang" element={<MyCart />} />
+            <Route exact path="/gopy" element={<FeedBack />} />
           </Routes>
         </div>
         <Footer />

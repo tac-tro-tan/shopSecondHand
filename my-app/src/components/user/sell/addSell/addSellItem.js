@@ -83,8 +83,8 @@ function AddSellItem() {
                                             <label htmlFor="floatingInput" className="pr-3">Loại sản phẩm</label>
                                         </div>
                                         <div className="form-floating mb-3">
-                                            <input type="text" className="form-control" id="floatingInput" placeholder="Vị trí bán" />
-                                            <label htmlFor="floatingInput" className="pr-3">Vị trí bán</label>
+                                            <input type="text" className="form-control" id="floatingInput" placeholder="Khu vực" />
+                                            <label htmlFor="floatingInput" className="pr-3">Khu vực</label>
                                         </div>
                                         <div className="form-floating mb-3">
                                             <input type="text" className="form-control" id="floatingInput" placeholder="Số điện thoại" />
@@ -95,11 +95,11 @@ function AddSellItem() {
                             </div>
                             <div className="mt-3 anh">
                                 <input ref={ref} className="btn btn-outline-info" type="file" multiple accept="image/*" onChange={onImageChange} />
-                                <div className="slide-container .react-slideshow-wrapper" style={{height:"550px"}}>
-                                    <Slide ref={slideRef} {...properties}>
+                                <div className="slide-container .react-slideshow-wrapper">
+                                    <Slide cssClass="slide1" ref={slideRef} {...properties}>
                                         {slideImages.map((each, index) => (
-                                            <div key={index} className="each-slide" >
-                                                <img style={{ width: "375px", height: "500px" }} src={each} alt="sample" />
+                                            <div key={index} className="each-slide ">
+                                                <img className="lazy img-thumbnail" src={each} alt="sample" />
                                             </div>
                                         ))}
                                     </Slide>
@@ -143,7 +143,7 @@ function AddSellItem() {
 
                         <div className="mt-3">
                             <div className="form-group">
-                                <label htmlFor="exampleFormControlTextarea1">Example textarea</label>
+                                <label htmlFor="exampleFormControlTextarea1">Chi tiết sản phẩm:</label>
                                 <textarea
                                     maxLength={5000}
                                     placeholder="nội dung chi tiết sản phẩm"

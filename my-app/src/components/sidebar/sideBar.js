@@ -54,8 +54,8 @@ const SiderBer = ({ image, collapsed, rtl, toggled, handleToggleSidebar }) => {
                         Price
                     </MenuItem>
                     <div className="row">
-                        <input class="form-control form-control-sm col input1" type="text" placeholder="min"></input>
-                        <input class="form-control form-control-sm col input1" type="text" placeholder="max"></input>
+                        <input className="form-control form-control-sm col input1" type="text" placeholder="min"></input>
+                        <input className="form-control form-control-sm col input1" type="text" placeholder="max"></input>
                     </div>
                     {/* <MenuItem icon={<FaGem />}> 'min-max'</MenuItem> */}
                 </Menu>
