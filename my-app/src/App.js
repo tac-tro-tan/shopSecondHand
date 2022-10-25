@@ -18,13 +18,28 @@ import MyCart from './components/user/myCart/myCart';
 import FeedBack from './components/user/feedBack/feedBack';
 
 function App() {
+  
+
+  // const [listItemCart,setListItemCart] = useState([]);
+  // useEffect(()=>{
+  //   const fetchData = async () => {
+  //     const requestOptions = {
+  //         method: 'GET'
+  //     };
+  //     const response = await fetch('http://localhost:3003/sanPham', requestOptions)
+  //     const data = await response.json();
+  //     setListItemCart(data.filter(a=>a.id.idCustomer == idAcc));
+  // }
+  // fetchData();
+  // },[])
+
   return (<>
     <Router>
       <div className="App">
         <Nabar />
         <div className='minibody'>
           <Routes>
-            <Route exact path="/" element={<Home />} />
+            <Route exact path="/" element={<Home/>} />
             <Route exact path="/chitiet" element={<ProductDetails />} />
             <Route exact path="/dangnhap" element={<Login />} />
             <Route exact path="/thongtincanhan" element={<PersonInfor />} />

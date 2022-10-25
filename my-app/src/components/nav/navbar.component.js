@@ -34,7 +34,7 @@ function Nabar() {
     let backgroud = { backgroundColor: (scrolls) ? "#321" : "#124" };
 
     // data đăng nhập
-    const { title, role } = useSelector(selectCustomer);
+    const { title } = useSelector(selectCustomer);
     const dispatch = useDispatch();
     function handleClick() {
         dispatch(updateCustomer(""));
@@ -56,7 +56,7 @@ function Nabar() {
             <Navbar fixed={scrolls && "top"} style={backgroud}
             >
                 <Container>
-                    {role == 1 ?
+                    {title ?
                         <Nav >
                             <Nav.Link as={Link} to="/">TRANG CHỦ</Nav.Link>
                             <Nav.Link as={Link} to="/danhsachbanhang">ĐƠN BÁN</Nav.Link>
@@ -64,16 +64,10 @@ function Nabar() {
                             <Nav.Link as={Link} to="/gopy">GÓP Ý</Nav.Link>
                             <Nav.Link as={Link} to="/thongtincanhan">THÔNG TIN CÁ NHÂN</Nav.Link>
                         </Nav>
-                        : role == 2 ?
-                            <Nav >
-                                <Nav.Link as={Link} to="/">TÀI KHOẢN</Nav.Link>
-                                <Nav.Link as={Link} to="/gopy">GÓP Ý</Nav.Link>
-                                <Nav.Link as={Link} to="/thongtincanhan">THÔNG TIN CÁ NHÂN</Nav.Link>
-                            </Nav>
-                            :
-                            <Nav >
-                                <Nav.Link as={Link} to="/">TRANG CHỦ</Nav.Link>
-                            </Nav>}
+                        :
+                        <Nav >
+                            <Nav.Link as={Link} to="/">TRANG CHỦ</Nav.Link>
+                        </Nav>}
 
                     <Nav pullright>
 

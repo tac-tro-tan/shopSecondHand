@@ -2,7 +2,7 @@
     "account": [
         {
             "idAcc": 1,
-            "title": "Admin",
+            "title": "Customer3",
             "first_name": "Georgette",
             "last_name": "D'Agostino",
             "email": "123@gmail.com",
@@ -10,8 +10,7 @@
             "phone": "3397477956",
             "address": "18 Rigney Alley",
             "gender": "Female",
-            "Bday": "2/13/2022",
-            "role":2
+            "Bday": "2/13/2022"
         },
         {
             "idAcc": 2,
@@ -23,8 +22,7 @@
             "phone": "7613685691",
             "address": "4996 Autumn Leaf Pass",
             "gender": "Female",
-            "Bday": "4/21/2022",
-            "role":1
+            "Bday": "4/21/2022"
         },
         {
             "idAcc": 3,
@@ -36,8 +34,7 @@
             "phone": "8151209216",
             "address": "79260 Sutherland Alley",
             "gender": "Female",
-            "Bday": "7/12/2022",
-            "role":2
+            "Bday": "7/12/2022"
         },
         {
             "idAcc": 4,

@@ -13,8 +13,7 @@ const initialState = {
   "phone": "7613685691",
   "address": "4996 Autumn Leaf Pass",
   "gender": "Female",
-  "Bday": "4/21/2022",
-  "role":0
+  "Bday": "4/21/2022"
 };
 
 // Cấu hình slice
@@ -39,7 +38,6 @@ export const userSlice = createSlice({
       state.gender = action.payload.gender;
 
       state.Bday = action.payload.Bday;
-      state.role = action.payload.role;
     }
   }
 });

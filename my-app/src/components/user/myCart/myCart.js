@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import "./myCart.css";
-import { Link } from "react-router-dom";
+import ListItem from "../listItem/listItem";
+import { useSelector } from "react-redux";
+import { selectCustomer } from "../../../store/userSlice";
 
 function MyCart() {
+
+    const { idAcc } = useSelector(selectCustomer);
+
+
+    const [listItemCart, setlistItemCart] = useState([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const requestOptions = {
+                method: 'GET'
+            };
+            const response = await fetch('http://localhost:3003/sanPham', requestOptions)
+            const data = await response.json();
+            setlistItemCart(data.filter(a => a.id.idCustomer == idAcc));
+        }
+        fetchData();
+    }, []);
 
     return (
         <div>
@@ -11,75 +29,7 @@ function MyCart() {
                 <div style={{ textAlign: "center" }}><h1>Giỏ hàng của bạn:</h1></div>
             </div>
             <Container>
-                <div className="mx-auto col text-center scroll-container" >
-                    <div className="row row1">
-
-                        <div className="col">
-                            <Link to="/chitiet">
-                                <div className="card w-15">
-                                    <img className="card-img-top" height="190px" src="" alt="Card image cap"></img>
-                                    <div className="card-body">
-                                        <h5 className="card-title">Quạt cũ 5 năm</h5>
-                                        <p className="card-text">Price: 50k</p>
-                                    </div>
-                                </div>
-                            </Link>
-                        </div>
-
-                        <div className="col">
-                            <div className="card w-15">
-                                <img className="card-img-top" height="190px" src="" alt="Card image cap"></img>
-                                <div className="card-body">
-                                    <h5 className="card-title">Quạt cũ 5 năm</h5>
-                                    <p className="card-text">Price: 50k</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col">
-                            <div className="card " style={{ width: "15rem" }}>
-                                <img className="card-img-top" height="190px" src="" alt="Card image cap"></img>
-                                <div className="card-body">
-                                    <h5 className="card-title">Quạt cũ 5 năm</h5>
-                                    <p className="card-text">Price: 50k</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="row row1">
-                        <div className="col">
-                            <div className="card " style={{ width: "15rem" }}>
-                                <img className="card-img-top" height="190px" src="" alt="Card image cap"></img>
-                                <div className="card-body">
-                                    <h5 className="card-title">Quạt cũ 5 năm</h5>
-                                    <p className="card-text">Price: 50k</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col">
-                            <div className="card " style={{ width: "15rem" }}>
-                                <img className="card-img-top" height="190px" src="" alt="Card image cap"></img>
-                                <div className="card-body">
-                                    <h5 className="card-title">Quạt cũ 5 năm</h5>
-                                    <p className="card-text">Price: 50k</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col">
-                            <div className="card " style={{ width: "15rem" }}>
-                                <img className="card-img-top" height="190px" src="" alt="Card image cap"></img>
-                                <div className="card-body">
-                                    <h5 className="card-title">Quạt cũ 5 năm</h5>
-                                    <p className="card-text">Price: 50k</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <ListItem listItem={listItemCart} />
             </Container>
         </div>
     );
