@@ -1,6 +1,5 @@
 // @ts-nocheck
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { generatePath, Link } from "react-router-dom";
 import {
     Navbar,
     Nav,
@@ -12,29 +11,10 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { selectCustomer, updateCustomer } from "../../store/userSlice";
 
-
 function Nabar() {
 
-
-    const [scrolls, setScrolls] = useState(false);
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 70) {
-                setScrolls(true);
-            }
-            else setScrolls(false);
-        }
-        window.addEventListener('scroll', handleScroll);
-        //Cleanup function
-        // xóa event khi hàm unmounted
-        return (() => {
-            window.removeEventListener('scroll', handleScroll);
-        })
-    }, []);
-    let backgroud = { backgroundColor: (scrolls) ? "#321" : "#124" };
-
     // data đăng nhập
-    const { title } = useSelector(selectCustomer);
+    const { title, id } = useSelector(selectCustomer);
     const dispatch = useDispatch();
     function handleClick() {
         dispatch(updateCustomer(""));
@@ -52,17 +32,15 @@ function Nabar() {
                 <Navbar.Collapse id="basic-navbar-nav" >
                 </Navbar.Collapse>
             </Navbar>
-            {scrolls && <div style={{ height: 70 }}></div>}
-            <Navbar fixed={scrolls && "top"} style={backgroud}
-            >
+            <Navbar style={{backgroundColor: "rgb(167, 190, 32)"}}>
                 <Container>
                     {title ?
                         <Nav >
                             <Nav.Link as={Link} to="/">TRANG CHỦ</Nav.Link>
-                            <Nav.Link as={Link} to="/danhsachbanhang">ĐƠN BÁN</Nav.Link>
+                            <Nav.Link as={Link} to={generatePath("/danhsachbanhang/:idc", { idc: id })}>ĐƠN BÁN</Nav.Link>
                             <Nav.Link as={Link} to="/giohang">GIỎ HÀNG</Nav.Link>
                             <Nav.Link as={Link} to="/gopy">GÓP Ý</Nav.Link>
-                            <Nav.Link as={Link} to="/thongtincanhan">THÔNG TIN CÁ NHÂN</Nav.Link>
+                            <Nav.Link as={Link} to="/chat">TIN NHẮN</Nav.Link>
                         </Nav>
                         :
                         <Nav >
@@ -70,8 +48,21 @@ function Nabar() {
                         </Nav>}
 
                     <Nav pullright>
+                        {title ?
+                            <NavDropdown title={title} align="end" >
+                                <NavDropdown.Item >
+                                    <Nav.Link as={Link} to="/thongtincanhan">THÔNG TIN CÁ NHÂN</Nav.Link>
+                                </NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item >
+                                    <Nav.Link as={Link} to="/dangnhap" onClick={handleClick}>ĐĂNG XUẤT</Nav.Link>
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                            :
+                            <Nav.Link as={Link} to="/dangnhap" onClick={handleClick}>ĐĂNG NHẬP/ĐĂNG KÝ</Nav.Link>
+                        }
 
-                        <Nav.Link as={Link} to="/dangnhap" onClick={handleClick}>{title ? `${title}` : "ĐĂNG NHẬP/ĐĂNG KÝ"}</Nav.Link>
+
 
                     </Nav>
                 </Container>

@@ -1,7 +1,12 @@
 .price1{
     position: absolute;
     bottom: 1rem;
-    left: 2.5rem;
+    left: 1rem;
+}
+.price2{
+    position: absolute;
+    bottom: 2rem;
+    left: 1rem;
 }
 .absolute{
     position: relative;
@@ -16,4 +21,15 @@
 a{
     color: black;
     text-decoration: none;
+}
+.row1{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.w-15{
+    width: 15rem;
+}
+.divv {
+    padding: 20px;
+    margin: 3px;
 }

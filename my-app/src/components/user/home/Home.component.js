@@ -3,6 +3,7 @@ import ListItem from "../listItem/listItem";
 import SiderBer from '../../sidebar/sideBar';
 
 function Home() {
+    // danh sách tất cả sản phẩm+sidebar
     const [listItemHome, setListItemHome] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
@@ -21,7 +22,9 @@ function Home() {
             <div className='sider'>
                 <SiderBer />
             </div>
-            <ListItem listItem={listItemHome} />
+            {/* hiển thị danh sách sản phẩm với đầu vào là: 
+            listItem:danh sách sản phẩm và sell:có phải danh sách sản phẩm của mình hay không  */}
+            <ListItem listItem={listItemHome} sell={false}/>
         </div>
     );
 }

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import './App.css';
 import Footer from './components/footer/footer';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import 'react-pro-sidebar/dist/css/styles.css';
 import Nabar from './components/nav/navbar.component';
@@ -16,22 +16,14 @@ import 'react-slideshow-image/dist/styles.css'
 import DetailSellItem from './components/user/sell/detailSell/detailSellItem';
 import MyCart from './components/user/myCart/myCart';
 import FeedBack from './components/user/feedBack/feedBack';
+import { useSelector } from 'react-redux';
+import { selectCustomer } from './store/userSlice';
+import Protected from './components/protectPath/protected';
+import Chat from './components/user/chat/chat';
 
 function App() {
-  
 
-  // const [listItemCart,setListItemCart] = useState([]);
-  // useEffect(()=>{
-  //   const fetchData = async () => {
-  //     const requestOptions = {
-  //         method: 'GET'
-  //     };
-  //     const response = await fetch('http://localhost:3003/sanPham', requestOptions)
-  //     const data = await response.json();
-  //     setListItemCart(data.filter(a=>a.id.idCustomer == idAcc));
-  // }
-  // fetchData();
-  // },[])
+  const { title } = useSelector(selectCustomer);
 
   return (<>
     <Router>
@@ -39,16 +31,37 @@ function App() {
         <Nabar />
         <div className='minibody'>
           <Routes>
-            <Route exact path="/" element={<Home/>} />
-            <Route exact path="/chitiet" element={<ProductDetails />} />
+            <Route path="home" element={<Home />} />
+            {/* sửa mọi đường dẫn vớ vẩn thành /home */}
+            <Route path="*" element={<Navigate replace to="/home" />} />
             <Route exact path="/dangnhap" element={<Login />} />
-            <Route exact path="/thongtincanhan" element={<PersonInfor />} />
-            <Route exact path="/doimatkhau" element={<ChangePass />} />
-            <Route exact path="/danhsachbanhang" element={<Sell />} />
-            <Route exact path="/themdonban" element={<AddSellItem />} />
-            <Route exact path="/chitietdonban" element={<DetailSellItem />} />
-            <Route exact path="/giohang" element={<MyCart />} />
-            <Route exact path="/gopy" element={<FeedBack />} />
+            <Route path="/chitiet/:idd" element={<ProductDetails />} />
+            <Route exact path="/danhsachbanhang/:idc" element={<Sell />} />
+
+            {/* <Protected/> giúp: nếu ko có tài khoản mà nhấn vào
+             /thongtincanhan thi chuyen huong den trang /home */}
+            <Route exact path="/thongtincanhan" element={<Protected isLoggedIn={title}>
+                <PersonInfor />
+              </Protected>
+            } />
+            <Route exact path="/doimatkhau" element={<Protected isLoggedIn={title}>
+                <ChangePass />
+              </Protected>} />
+            <Route exact path="/themdonban" element={<Protected isLoggedIn={title}>
+              <AddSellItem />
+            </Protected>} />
+            <Route exact path="/chitietdonban/:idb" element={<Protected isLoggedIn={title}>
+              <DetailSellItem />
+            </Protected>} />
+            <Route exact path="/giohang" element={<Protected isLoggedIn={title}>
+              <MyCart />
+            </Protected>} />
+            <Route exact path="/gopy" element={<Protected isLoggedIn={title}>
+              <FeedBack />
+            </Protected>} />
+            <Route path="/chat" element={<Protected isLoggedIn={title}>
+              <Chat />
+            </Protected>} />
           </Routes>
         </div>
         <Footer />

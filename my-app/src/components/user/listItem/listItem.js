@@ -1,26 +1,19 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import "./listItem.css";
-import { Link } from "react-router-dom";
+import { generatePath, Link } from "react-router-dom";
 import PaginationComponent from "../../pagination/paginationComponent";
-function ListItem({ listItem }) {
+function ListItem({ listItem, sell }) {
+    // phân trang
     const [state, setState] = useState({
         data: [],
         totalRecords: 0,
         limit: 6
     })
 
-
     useEffect(() => {
-        let timerId = setTimeout(() => {
-            loadData(1)
-        }, 1000);
-        return () => {
-            clearTimeout(timerId);
-        };
+        loadData(1)
     }, [listItem])
-
-
 
     const loadData = (page) => {
         setState({
@@ -28,7 +21,6 @@ function ListItem({ listItem }) {
             totalRecords: listItem.length,
             limit: 6
         })
-        console.log(listItem);
     }
     const getPaginatedData = page => {
         loadData(page);
@@ -45,12 +37,14 @@ function ListItem({ listItem }) {
                     {state.data.map((post, index) => (
                         <React.Fragment key={index * 3}>
                             <div className="col my-3" key={index}>
-                                <Link to="/chitiet">
-                                    <div className="card absolute" style={{ width: "15rem", height: "18rem" }}>
-                                        <img className="card-img-top" height="190px" src={post.data.image} alt="Card"></img>
-                                        <div className="card-body">
-                                            <h6 className="card-title">{post.data.title}</h6>
-                                            <p className="card-text price1">giá: {post.data.price} đồng</p>
+                                <Link to={sell ? generatePath("/chitietdonban/:idb", { idb: post.id.idSP })
+                                    : generatePath("/chitiet/:idd", { idd: post.id.idSP })}>
+                                    <div className="card absolute" style={{ width: "15rem", height: "20rem" }}>
+                                        <img className="card-img-top" style={{ width: "15rem", height: "13rem" }} src={post.data.image} alt="Card"></img>
+                                        <div className="card-body" style={{ textAlign: "start" }}>
+                                            <small className="card-title">{post.data.title}</small>
+                                            <sub className="card-text price2">giá: {post.data.price} đồng</sub>
+                                            <sub className="card-text price1">khu vực: {post.data.city} </sub>
                                         </div>
                                     </div>
                                 </Link>

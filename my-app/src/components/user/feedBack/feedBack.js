@@ -4,44 +4,7 @@ import "./feedBack.css";
 
 
 function FeedBack() {
-    const ref = useRef(null);
-    let slideRef = React.createRef();
-    const [images, setImages] = useState([]);
-    const [slideImages, setSlideImages] = useState([]);
-    useEffect(() => {
-        if (images.length < 1) return;
-        const newImageUrls = [];
-        images.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
-        setSlideImages(newImageUrls.map((img) => (`${img}`)))
-    }, [images]);
-
-    function onImageChange(e) {
-        setImages([...e.target.files]);
-    }
-
-    function back() {
-        slideRef.current.goBack();
-    }
-
-    function next() {
-        slideRef.current.goNext();
-    }
-
-    function deleteImages() {
-        setSlideImages([]);
-        ref.current.value = '';
-    }
-
-    const properties = {
-        duration: 5000,
-        autoplay: false,
-        transitionDuration: 500,
-        arrows: false,
-        infinite: true,
-        easing: "ease",
-        indicators: (i) => <div className="indicator">{i + 1}</div>
-    };
-
+    
     return (
         <div>
             <div className="divv">
@@ -59,10 +22,10 @@ function FeedBack() {
                         <Form.Control
                             as="textarea"
                             placeholder="Leave a comment here"
-                            style={{ height: '150px' }}
+                            style={{ height: '13rem' }}
                         />
                     </FloatingLabel>
-                    <div style={{ alignItems: "center", textAlign: "center", margin: 20 }}>
+                    <div style={{ alignItems: "center", textAlign: "center", margin: 10 }}>
                         <Button variant="primary" type="button">
                             Gửi
                         </Button>

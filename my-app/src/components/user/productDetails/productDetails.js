@@ -1,12 +1,52 @@
 // @ts-nocheck
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import "./productDetails.css";
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation, generatePath } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectCustomer } from "../../../store/userSlice";
 
 function ProductDetails() {
+    // id sản phẩm
+    const location = useLocation()
+    const idSP = location.pathname.replace("/chitiet/", "");
+    // id các sản phẩm được mình lưu
+    const { cart } = useSelector(selectCustomer);
+    // kiểm tra sản phẩm này được thêm vào giỏ hàng hay chưa
+    const [addToCart, setAddToCart] = useState(cart.includes(Number(idSP)));
+    // thông tin sản phẩm
+    const navigate = useNavigate()
+    const [itemProduct, setItemProduct] = useState([{
+        "id": {
+            "idSP": 0,
+            "SDT": "",
+            "idCustomer": 0
+        },
+        "data": {
+            "status": true,
+            "city": "",
+            "address": "",
+            "category": "",
+            "title": "",
+            "description": " ",
+            "image": "https://cdn.chotot.com/mK4xJxBedDtJWuqdwu_23RvMyoO7qm-bt4Gg5NpdVBs/preset:view/plain/2e29b541396806f88d579f1ba3e07b37-2794832054110024626.jpg",
+            "price": 0,
+            "siteURL": "https://xe.chotot.com/mua-ban-oto-quan-cau-giay-ha-noi/100072055.htm"
+        }
+    }]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const requestOptions = {
+                method: 'GET'
+            };
+            const response = await fetch('http://localhost:3003/sanPham', requestOptions)
+            const data = await response.json();
+            setItemProduct(data.filter(a => a.id.idSP == idSP));
+        }
+        fetchData();
+    }, []);
 
     var title = String.raw`
              ___| |_  ___  _____ __      _  ___  _____ ___
@@ -14,22 +54,7 @@ function ProductDetails() {
             \__ | |_  (_| | |     \ V  V /  (_| | |   \__ |
             |___/\__|\__,_|_|      \_/\_/  \__,_|_|   |___/
         `;
-    var content = String.raw`
-
-    iMac 27" with new 1TB SDD and a Macbook pro Retina 15" model for sale, they're old but work solid and
-    I have been used them to edit, grade, 8K RED raw, and pretty much anything for years.
-
-    45,000 YEN pick up.
-
-    The iMac is 2011 model, i7 3.4ghz full details in images, perfect condition and super quick now with
-    the SSD installed.
-
-    35,000 YEN pick up.
-
-    Macbook Pro 15inch Retina, works perfect but some of the clear coat I think it is has been rubbing 
-    off the screen, can be noticed on solid black backgrounds but no issues once screen is full colour
-     displaying images or video etcs...
-    Also have a PS3 for sale 10,000 yen and a PS4 30,000 yen.`;
+    var content = String.raw`${itemProduct[0].data.description}`;
 
     const slideImages = [
         {
@@ -47,73 +72,91 @@ function ProductDetails() {
         },
     ];
 
+    const changeAddCart = () => {
+        setAddToCart(!addToCart);
+    }
+
     return (
-        <div>
-            <Container>
-                <div className="mx-auto col text-center scroll-container" >
-                    <section id="phapluat" className="divv">
-                        <div className="d-flex justify-content-between w-100 mt-3">
 
-                            <div className="d-flex flex-column align-items-start">
-                                <div className="d-flex">
-                                    <div>
-                                        <Link to="/">
-                                            <button className="btn outline btn-outline-primary me-4">nút back</button>
-                                        </Link>
-                                    </div>
-                                    <div>
-                                        <Link to="/">
-                                            <button className="btn outline btn-outline-primary">Cửa hàng</button>
-                                        </Link>
-                                    </div>
-                                </div>
+        <Container>
+            <div className="mx-auto col text-center scroll-container" >
+                <section id="phapluat" className="divv">
+                    <div className="d-flex justify-content-between w-100 mt-3">
 
-                                <div className="p-1"><h3>Quạt 5 năm</h3></div>
-                                <div className="p-1"><span className="border border-info rounded p-1">giá:50k</span></div>
-                                <div className="p-1"><span className="border border-info rounded p-1">sdt:0123123123</span></div>
-                                <div className="p-1"><span className="border border-info rounded p-1">thể loại:đồ điện tử</span></div>
-                                <div className="p-1"><span className="border border-info rounded p-1">Khu vực: Hòa Khánh-Liên Chiểu-Đà nẵng</span></div>
-                                <div className="p-1">
-                                    <Link to="/">
-                                        <button className="btn outline btn-outline-primary">Chat với người bán</button>
-                                    </Link>
+                        <div className="d-flex flex-column align-items-start" style={{ textAlign: "start" }}>
+                            <div className="d-flex">
+                                <div>
+                                    <button className="btn outline btn-outline-primary me-4"
+                                        onClick={() => navigate(-1)}>
+                                        Back
+                                    </button>
                                 </div>
-                                <div className="p-1">
-                                    <Link to="/">
-                                        <button className="btn outline btn-outline-primary">Thêm vào giỏ hàng</button>
+                                <div>
+                                    <Link to={generatePath("/danhsachbanhang/:idc", { idc: itemProduct[0].id.idCustomer })}>
+                                        <button className="btn outline btn-outline-primary">Cửa hàng</button>
                                     </Link>
                                 </div>
                             </div>
-                            <div className="anh mt-3">
-                                <div className="slide-container" >
-                                    <Slide>
-                                        {slideImages.map((slideImage, index) => (
-                                            <div className="each-slide d-flex flex-column img-responsive-wrap " key={index}>
-                                                <img style={{ width: "100%", height: "100%" }} className="lazy img-thumbnail img-inner" src={slideImage.url} alt="sample" />
-                                            </div>
-                                        ))}
-                                    </Slide>
+
+                            <div className="p-1 " ><h4>{itemProduct[0].data.title}</h4></div>
+                            <div className="p-1">
+                                <Link to="/">
+                                    <button className="btn outline btn-outline-primary">Chat với người bán</button>
+                                </Link>
+                            </div>
+                            {addToCart ?
+                                <div className="p-1">
+                                    <button className="btn outline btn-outline-danger"
+                                        onClick={changeAddCart}>Xóa khỏi giỏ hàng</button>
                                 </div>
+                                :
+                                <div className="p-1">
+                                    <button className="btn outline btn-outline-primary"
+                                        onClick={changeAddCart}>Thêm vào giỏ hàng</button>
+                                </div>
+                            }
+
+                            <div className="border border-info rounded p-1">
+                                <div className="p-1"><span >giá: {itemProduct[0].data.price} đồng</span></div>
+                                <div className="p-1"><span >sdt: {itemProduct[0].id.SDT}</span></div>
+                                <div className="p-1"><span >thể loại: {itemProduct[0].data.category}</span></div>
+                                <div className="p-1"><span >Vị trí: {itemProduct[0].data.address}</span></div>
+
+                            </div>
+
+
+                        </div>
+                        <div className="anh mt-3">
+                            <div className="slide-container" >
+                                <Slide>
+                                    {slideImages.map((slideImage, index) => (
+                                        <div className="each-slide d-flex flex-column img-responsive-wrap " key={index}>
+                                            <img style={{ width: "100%", height: "100%" }} className="lazy img-thumbnail img-inner" src={itemProduct[0].data.image} alt="sample" />
+
+                                        </div>
+                                    ))}
+                                </Slide>
                             </div>
                         </div>
+                    </div>
 
 
-                        <div className="mt-3">
+                    <div className="mt-3">
 
-                            <pre style={{ textAlign: "start" }}>{content}
-                            </pre>
+                        <pre style={{ textAlign: "start" }}>
+                            {content}
+                        </pre>
 
-                            <div>
-                                <pre> {title} </pre>
-                            </div>
-
+                        <div>
+                            <pre> {title} </pre>
                         </div>
 
+                    </div>
 
-                    </section>
-                </div>
-            </Container>
-        </div>
+
+                </section>
+            </div>
+        </Container>
     );
 }
 

@@ -51,112 +51,85 @@ function AddSellItem() {
             </div>
             <Container>
                 <div className="mx-auto col text-center scroll-container" >
-                    <section id="phapluat" className="divv">
-                        <div className="d-flex justify-content-between w-100 mt-3">
-
-                            <div className="d-flex flex-column align-items-start">
-                                <div className="d-flex">
-                                    <div>
-                                        <Link to="/">
-                                            <button className="btn outline btn-outline-primary me-4">nút back</button>
-                                        </Link>
-                                    </div>
-                                    <div>
-                                        <Link to="/">
-                                            <button className="btn outline btn-outline-primary">Lưu</button>
-                                        </Link>
-                                    </div>
-
+                    <div className="d-flex justify-content-between w-100 mt-3">
+                        <div className="d-flex flex-column align-items-start">
+                            <div className="d-flex">
+                                <div>
+                                    <Link to="/">
+                                        <button className="btn outline btn-outline-primary me-4">nút back</button>
+                                    </Link>
                                 </div>
-                                <div className="box2 box-width-2 mx-auto col d-flex justify-content-center" >
-                                    <div className="d-flex flex-column justify-content-between w-100 mt-3">
-                                        <div className="form-floating mb-3">
-                                            <input type="text" className="form-control" id="floatingInput" placeholder="Tên sản phẩm" />
-                                            <label htmlFor="floatingInput" className="pr-3">Tên sản phẩm</label>
-                                        </div>
-                                        <div className="form-floating mb-3">
-                                            <input type="text" className="form-control" id="floatingInput" placeholder="Giá sản phẩm" />
-                                            <label htmlFor="floatingInput" className="pr-3">Giá sản phẩm</label>
-                                        </div>
-                                        <div className="form-floating mb-3">
-                                            <input type="text" className="form-control" id="floatingInput" placeholder="Loại sản phẩm" />
-                                            <label htmlFor="floatingInput" className="pr-3">Loại sản phẩm</label>
-                                        </div>
-                                        <div className="form-floating mb-3">
-                                            <input type="text" className="form-control" id="floatingInput" placeholder="Khu vực" />
-                                            <label htmlFor="floatingInput" className="pr-3">Khu vực</label>
-                                        </div>
-                                        <div className="form-floating mb-3">
-                                            <input type="text" className="form-control" id="floatingInput" placeholder="Số điện thoại" />
-                                            <label htmlFor="floatingInput" className="pr-3">Số điện thoại</label>
-                                        </div>
+                                <div>
+                                    <Link to="/">
+                                        <button className="btn outline btn-outline-primary">Lưu</button>
+                                    </Link>
+                                </div>
+
+                            </div>
+                            <div className="box2 box-width-2 mx-auto col d-flex justify-content-center" >
+                                <div className="d-flex flex-column justify-content-between w-100 mt-3">
+                                    <div className="form-floating mb-3">
+                                        <input type="text" className="form-control" id="floatingInput" placeholder="Tên sản phẩm" />
+                                        <label htmlFor="floatingInput" className="pr-3">Tên sản phẩm</label>
+                                    </div>
+                                    <div className="form-floating mb-3">
+                                        <input type="text" className="form-control" id="floatingInput" placeholder="Giá sản phẩm" />
+                                        <label htmlFor="floatingInput" className="pr-3">Giá sản phẩm</label>
+                                    </div>
+                                    <div className="form-floating mb-3">
+                                        <input type="text" className="form-control" id="floatingInput" placeholder="Loại sản phẩm" />
+                                        <label htmlFor="floatingInput" className="pr-3">Loại sản phẩm</label>
+                                    </div>
+                                    <div className="form-floating mb-3">
+                                        <input type="text" className="form-control" id="floatingInput" placeholder="Khu vực" />
+                                        <label htmlFor="floatingInput" className="pr-3">Khu vực</label>
+                                    </div>
+                                    <div className="form-floating mb-3">
+                                        <input type="text" className="form-control" id="floatingInput" placeholder="Số điện thoại" />
+                                        <label htmlFor="floatingInput" className="pr-3">Số điện thoại</label>
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-3 anh">
-                                <input ref={ref} className="btn btn-outline-info" type="file" multiple accept="image/*" onChange={onImageChange} />
-                                <div className="slide-container .react-slideshow-wrapper">
-                                    <Slide cssClass="slide1" ref={slideRef} {...properties}>
-                                        {slideImages.map((each, index) => (
-                                            <div key={index} className="each-slide ">
-                                                <img className="lazy img-thumbnail" src={each} alt="sample" />
-                                            </div>
-                                        ))}
-                                    </Slide>
-                                </div>
-                                {slideImages.length?<div>
-                                    <div className="slide-container buttons">
+                        </div>
+                        <div className="mt-3 anh">
+                            <input ref={ref} className="btn btn-outline-info" type="file" multiple accept="image/*" onChange={onImageChange} />
+                            <div className="slide-container .react-slideshow-wrapper">
+                                <Slide cssClass="slide1" ref={slideRef} {...properties}>
+                                    {slideImages.map((each, index) => (
+                                        <div key={index} className="each-slide ">
+                                            <img className="lazy img-thumbnail" src={each} alt="sample" />
+                                        </div>
+                                    ))}
+                                </Slide>
+                            </div>
+                            {slideImages.length ? <div>
+                                <div className="slide-container buttons">
                                     <button className="btn btn-outline-secondary" onClick={back} type="button">
                                         Go Back
                                     </button>
-                                    <button className="btn btn-outline-primary"  onClick={next} type="button">
+                                    <button className="btn btn-outline-primary" onClick={next} type="button">
                                         Go Next
                                     </button>
                                 </div>
                                 <div>
-                                    <button className="btn btn-outline-danger"  onClick={deleteImages}>Loại bỏ ảnh</button>
+                                    <button className="btn btn-outline-danger" onClick={deleteImages}>Loại bỏ ảnh</button>
                                 </div>
-                                </div>:null}
-                                
-                                {/* <div className="slide-container" >
-
-
-                                    <Slide>
-
-                                        {slideImages.map((slideImage, index) => (
-                                            <div style={{ maxWidth: "450px", height: "auto" }} className="each-slide" key={index}>
-                                                <span>{slideImage.caption}</span>
-                                                <img className="lazy img1" src={slideImage.url} alt="sample" />
-
-                                            </div>
-                                        ))}
-
-                                    </Slide>
-
-
-
-
-
-                                </div> */}
-                            </div>
+                            </div> : null}
                         </div>
+                    </div>
 
-                        <div className="mt-3">
-                            <div className="form-group">
-                                <label htmlFor="exampleFormControlTextarea1">Chi tiết sản phẩm:</label>
-                                <textarea
-                                    maxLength={5000}
-                                    placeholder="nội dung chi tiết sản phẩm"
-                                    className="form-control"
-                                    id="exampleFormControlTextarea1"
-                                    rows={10}
-                                >
-
-                                </textarea>
-                            </div>
+                    <div className="mt-3">
+                        <div className="form-group">
+                            <label htmlFor="exampleFormControlTextarea1">Chi tiết sản phẩm:</label>
+                            <textarea
+                                maxLength={5000}
+                                placeholder="nội dung chi tiết sản phẩm"
+                                className="form-control"
+                                id="exampleFormControlTextarea1"
+                                rows={10}
+                            />
                         </div>
-
-                    </section>
+                    </div>
                 </div>
             </Container>
         </div>

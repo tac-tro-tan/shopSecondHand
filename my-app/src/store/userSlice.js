@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Khởi tạo state cho slice, có thể kèm giá trị mặc định ban đầu
 const initialState = {
-  "idAcc": 2,
+  "id": 0,
   "title": "",
   "first_name": "Ilysa",
   "last_name": "Philcott",
@@ -13,7 +13,8 @@ const initialState = {
   "phone": "7613685691",
   "address": "4996 Autumn Leaf Pass",
   "gender": "Female",
-  "Bday": "4/21/2022"
+  "bDay": "4/21/2022",
+  "cart":[]
 };
 
 // Cấu hình slice
@@ -26,7 +27,7 @@ export const userSlice = createSlice({
     updateCustomer: (state, action) => {
       // Cập nhật state username với giá trị truyền vào qua action (action.payload)
       // Chạy thử console.log(action) để xem chi tiết giá trị action truyền vào
-      state.idAcc = action.payload.idAcc;
+      state.id = action.payload.id;
       state.title = action.payload.title;
       state.first_name = action.payload.first_name;
       state.last_name = action.payload.last_name;
@@ -37,7 +38,8 @@ export const userSlice = createSlice({
       state.address = action.payload.address;
       state.gender = action.payload.gender;
 
-      state.Bday = action.payload.Bday;
+      state.bDay = action.payload.bDay;
+      state.cart = action.payload.cart;
     }
   }
 });
