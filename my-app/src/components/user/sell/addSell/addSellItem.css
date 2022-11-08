@@ -1,34 +1,7 @@
 .anh {
   width: 40%;
-  height: 50%;
-}
-.img1 {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 5px;
-  image-rendering: pixelated;
-  object-fit: contain;
-  filter: contrast(180%);
 }
 
 h3 {
   text-align: center;
 }
-
-.indicator {
-  width: 30px;
-  color: blue;
-  text-align: center;
-  cursor: pointer;
-  border: 1px blue solid;
-}
-
-.indicator.active {
-  background: #000;
-  color: #fff;
-}
-
-.react-slideshow-wrapper.slide1:hover {
-  width: 99%;
-}
-

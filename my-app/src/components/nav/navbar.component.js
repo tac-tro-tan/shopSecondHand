@@ -1,10 +1,8 @@
 // @ts-nocheck
 import { generatePath, Link } from "react-router-dom";
 import {
-    Navbar,
     Nav,
-    NavDropdown,
-    Container
+    NavDropdown
 } from 'react-bootstrap';
 import React from "react";
 import { useSelector } from "react-redux";
@@ -22,51 +20,76 @@ function Nabar() {
 
     return (
         <>
-            <Navbar bg="primary" variant="light" expand="lg" >
-                <Navbar.Brand href="/"><img
-                    src="https://inkythuatso.com/uploads/images/2021/09/logo-cong-an-09-13-27-02.jpg-09-13-27-02.jpg"
-                    alt="" width={30} height={30} style={{ marginLeft: 80 }}
-                />MUA BÁN ĐỒ CŨ</Navbar.Brand>
-                <NavDropdown.Divider />
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav" >
-                </Navbar.Collapse>
-            </Navbar>
-            <Navbar style={{backgroundColor: "rgb(167, 190, 32)"}}>
-                <Container>
-                    {title ?
-                        <Nav >
-                            <Nav.Link as={Link} to="/">TRANG CHỦ</Nav.Link>
-                            <Nav.Link as={Link} to={generatePath("/danhsachbanhang/:idc", { idc: id })}>ĐƠN BÁN</Nav.Link>
-                            <Nav.Link as={Link} to="/giohang">GIỎ HÀNG</Nav.Link>
-                            <Nav.Link as={Link} to="/gopy">GÓP Ý</Nav.Link>
-                            <Nav.Link as={Link} to="/chat">TIN NHẮN</Nav.Link>
-                        </Nav>
-                        :
-                        <Nav >
-                            <Nav.Link as={Link} to="/">TRANG CHỦ</Nav.Link>
-                        </Nav>}
+            <nav className='navbar navbar-expand-lg navbar-light bg-light'>
+                <div className='container'>
+                    <div className='navbar-header'>
+                        <div className='btn1 navbar-brand page-scroll'>
+                            <Link to="tintuc" className='btn1 page-scroll'>Chợ cũ</Link>
+                        </div>
+                    </div>
 
-                    <Nav pullright>
-                        {title ?
-                            <NavDropdown title={title} align="end" >
-                                <NavDropdown.Item >
-                                    <Nav.Link as={Link} to="/thongtincanhan">THÔNG TIN CÁ NHÂN</Nav.Link>
-                                </NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item >
-                                    <Nav.Link as={Link} to="/dangnhap" onClick={handleClick}>ĐĂNG XUẤT</Nav.Link>
-                                </NavDropdown.Item>
-                            </NavDropdown>
-                            :
-                            <Nav.Link as={Link} to="/dangnhap" onClick={handleClick}>ĐĂNG NHẬP/ĐĂNG KÝ</Nav.Link>
-                        }
-
-
-
-                    </Nav>
-                </Container>
-            </Navbar>
+                    <div className='collapse navbar-collapse'>
+                        <ul className='d-flex nav navbar-nav navbar-right'>
+                            {title ?
+                                <React.Fragment>
+                                    <li>
+                                        <Link to="tintuc" className='btn1 page-scroll'>Tin tức</Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/" className='btn1 page-scroll'>Chợ</Link>
+                                    </li>
+                                    <li>
+                                        <Link to={generatePath("/danhsachbanhang/:idc", { idc: id })}
+                                            className='btn1 page-scroll'
+                                        >
+                                            Cửa hàng của tôi
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link className='btn1 page-scroll' to="/giohang">Giỏ hàng</Link>
+                                    </li>
+                                    <li>
+                                        <Link className='btn1 page-scroll' to="/gopy">Góp ý</Link>
+                                    </li>
+                                    <li>
+                                        <Link className='btn1 page-scroll' to={"/chat/" + id}>Tin nhắn</Link>
+                                    </li>
+                                    <li>
+                                        <NavDropdown title={title} align="end">
+                                            <NavDropdown.Item >
+                                                <Nav.Link as={Link} to="/thongtincanhan">
+                                                    Thông tin cá nhân
+                                                </Nav.Link>
+                                            </NavDropdown.Item>
+                                            <NavDropdown.Divider />
+                                            <NavDropdown.Item >
+                                                <Nav.Link as={Link} to="/dangnhap" onClick={handleClick}>
+                                                    Đăng xuất
+                                                </Nav.Link>
+                                            </NavDropdown.Item>
+                                        </NavDropdown>
+                                    </li>
+                                </React.Fragment> :
+                                <React.Fragment>
+                                    <li>
+                                        <Link to="tintuc" className='btn1 page-scroll'>Tin tức</Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/" className='btn1 page-scroll'>Chợ</Link>
+                                    </li>
+                                    <li>
+                                        <Link className='btn1 page-scroll'
+                                            to="/dangnhap"
+                                            onClick={handleClick}>
+                                            Đăng nhập/Đăng ký
+                                        </Link>
+                                    </li>
+                                </React.Fragment>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </>
     );
 }

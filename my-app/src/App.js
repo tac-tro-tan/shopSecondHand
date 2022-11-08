@@ -1,10 +1,8 @@
 // @ts-nocheck
 import './App.css';
-import Footer from './components/footer/footer';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import 'react-pro-sidebar/dist/css/styles.css';
-import Nabar from './components/nav/navbar.component';
 import Home from './components/user/home/Home.component';
 import ProductDetails from './components/user/productDetails/productDetails';
 import Login from './components/login/login';
@@ -20,54 +18,77 @@ import { useSelector } from 'react-redux';
 import { selectCustomer } from './store/userSlice';
 import Protected from './components/protectPath/protected';
 import Chat from './components/user/chat/chat';
+import Footer from "./componentsLanding/Sections/Footer"
+
+import { Helmet } from "react-helmet";
+// Screens
+import Landing from "./screens/Landing.jsx";
+import "./App.css";
+import TopNavbar from './componentsLanding/Nav/TopNavbar';
+import { FaArrowAltCircleUp } from 'react-icons/fa';
 
 function App() {
 
   const { title } = useSelector(selectCustomer);
 
-  return (<>
-    <Router>
-      <div className="App">
-        <Nabar />
-        <div className='minibody'>
-          <Routes>
-            <Route path="home" element={<Home />} />
-            {/* sửa mọi đường dẫn vớ vẩn thành /home */}
-            <Route path="*" element={<Navigate replace to="/home" />} />
-            <Route exact path="/dangnhap" element={<Login />} />
-            <Route path="/chitiet/:idd" element={<ProductDetails />} />
-            <Route exact path="/danhsachbanhang/:idc" element={<Sell />} />
+  //scroll on top
+  const onTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-            {/* <Protected/> giúp: nếu ko có tài khoản mà nhấn vào
+  return (
+    <Router>
+      <TopNavbar />
+      <div className='minibody'>
+        <button className='onTop' onClick={onTop}>
+          <FaArrowAltCircleUp/>
+        </button>
+        <Routes>
+          <Route path="tintuc" element={
+            <>
+              <Helmet>
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                <link href="https://fonts.googleapis.com/css2?family=Khula:wght@400;600;800&display=swap" rel="stylesheet" />
+              </Helmet>
+              <Landing />
+            </>
+          } />
+          <Route path="home" element={<Home />} />
+          {/* sửa mọi đường dẫn vớ vẩn thành /home */}
+          <Route path="*" element={<Navigate replace to="/home" />} />
+          <Route exact path="/dangnhap" element={<Login />} />
+          <Route path="/chitiet/:idd" element={<ProductDetails />} />
+          <Route exact path="/danhsachbanhang/:idc" element={<Sell />} />
+
+          {/* <Protected/> giúp: nếu ko có tài khoản mà nhấn vào
              /thongtincanhan thi chuyen huong den trang /home */}
-            <Route exact path="/thongtincanhan" element={<Protected isLoggedIn={title}>
-                <PersonInfor />
-              </Protected>
-            } />
-            <Route exact path="/doimatkhau" element={<Protected isLoggedIn={title}>
-                <ChangePass />
-              </Protected>} />
-            <Route exact path="/themdonban" element={<Protected isLoggedIn={title}>
-              <AddSellItem />
-            </Protected>} />
-            <Route exact path="/chitietdonban/:idb" element={<Protected isLoggedIn={title}>
-              <DetailSellItem />
-            </Protected>} />
-            <Route exact path="/giohang" element={<Protected isLoggedIn={title}>
-              <MyCart />
-            </Protected>} />
-            <Route exact path="/gopy" element={<Protected isLoggedIn={title}>
-              <FeedBack />
-            </Protected>} />
-            <Route path="/chat" element={<Protected isLoggedIn={title}>
-              <Chat />
-            </Protected>} />
-          </Routes>
-        </div>
-        <Footer />
+          <Route exact path="/thongtincanhan" element={<Protected isLoggedIn={title}>
+            <PersonInfor />
+          </Protected>
+          } />
+          <Route exact path="/doimatkhau" element={<Protected isLoggedIn={title}>
+            <ChangePass />
+          </Protected>} />
+          <Route exact path="/themdonban" element={<Protected isLoggedIn={title}>
+            <AddSellItem />
+          </Protected>} />
+          <Route exact path="/chitietdonban/:idb" element={<Protected isLoggedIn={title}>
+            <DetailSellItem />
+          </Protected>} />
+          <Route exact path="/giohang" element={<Protected isLoggedIn={title}>
+            <MyCart />
+          </Protected>} />
+          <Route exact path="/gopy" element={<Protected isLoggedIn={title}>
+            <FeedBack />
+          </Protected>} />
+          <Route path="/chat/:idc" element={<Protected isLoggedIn={title}>
+            <Chat />
+          </Protected>} />
+        </Routes>
       </div>
+      <Footer />
     </Router>
-  </>
   );
 }
 

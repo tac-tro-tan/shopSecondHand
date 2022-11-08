@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
 import { store } from "./store/index";
 import 'react-pro-sidebar/dist/css/styles.css';
 import 'react-notifications/lib/notifications.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "./style/flexboxgrid.min.css";
+import './style/index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -3,7 +3,6 @@ import { Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { selectCustomer, updateCustomer } from "../../../store/userSlice";
-import "./personInfor.css";
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 function PersonInfor() {
@@ -16,7 +15,7 @@ function PersonInfor() {
             case 'error':
                 NotificationManager.error('đã có lỗi gì đó xảy ra', 'Thất bại', 3000);
                 break;
-            default :
+            default:
                 alert("kill me, i'm here");
         }
     }
@@ -137,7 +136,6 @@ function PersonInfor() {
                 </div>
                 <NotificationContainer />
             </Container>
-            
         </div>
     );
 }

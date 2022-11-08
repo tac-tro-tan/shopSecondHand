@@ -1,6 +1,7 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import "./changePass.css";
+
 function ChangePass() {
 
     return (

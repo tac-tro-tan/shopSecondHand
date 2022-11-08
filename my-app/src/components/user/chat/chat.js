@@ -1,9 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { selectCustomer } from "../../../store/userSlice";
 import './chat.css'
 function Chat() {
+    //hàm rerender khi chat/chạy trang này để reload dữ liệu chat
+    const [rerende,setRerende] = useState(0);
+    //lấy giá trị id trên thanh path
+    const location = useLocation()
+    const idChater = location.pathname.replace("/chat/", "");
+
     //cuộn thanh tin nhắn xuống dưới cùng để thấy dòng tin nhắn mới  vừa chat
     const messagesEndRef = useRef(null);
     //
@@ -30,13 +37,15 @@ function Chat() {
             ]
         }
     ]);
+    //gửi tin nhắn
+    const [mess, setMess] = useState("");
     //search item listchat
     const [query, setQuery] = useState("");
     //chat box (bên phải)
     const [chatBox, setChatBox] = useState([
         {
             "user": "Ong",
-            "content": "Bypass Trachea to Cutaneous, Open Approach",
+            "content": "BReattachment of Common Bile Duct, Open Approach",
             "time": "19:28:28",
             "time2": "2022-02-10"
         },
@@ -80,6 +89,47 @@ function Chat() {
             listItem.sort((a, b) => (
                 new Date(b.chat[b.chat.length - 1].time2 + " " + b.chat[b.chat.length - 1].time) -
                 new Date(a.chat[a.chat.length - 1].time2 + " " + a.chat[a.chat.length - 1].time)));
+            //id người chat để xác định boxchat
+            let k1 = listItem.findIndex(a => a.idAcc1 == idChater && a.idAcc2 == id);
+            if (k1 == -1) k1 = listItem.findIndex(a => a.idAcc2 == idChater && a.idAcc1 == id);
+            if (idChater == id) {
+                setChatBox(listItem[0].chat);
+                setCssChat(listItem[0].id);
+            }
+            else if (k1 != -1) {
+                setChatBox(listItem[k1].chat);
+                setCssChat(listItem[k1].id);
+            } else {
+                let today = new Date();
+                let time21 = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+                let time1 = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                fetch('http://localhost:3003/chatted', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "idAcc1": Number(id),
+                        "idAcc2": Number(idChater),
+                        "chat": [
+                            {
+                                "user": `${title}`,
+                                "content": `chào bạn`,
+                                "time": `${time1}`,
+                                "time2": `${time21}`
+                            }
+                        ]
+                    }),
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((json) => setCssChat(json.id));
+                setChatBox([{
+                    "user": `${title}`,
+                    "content": `chào bạn`,
+                    "time": `${time1}`,
+                    "time2": `${time21}`
+                }]);
+            }
             setDataChat(listItem);
             //
             const dataShopBoss = [...listItem.map(a => a.idAcc1), ...listItem.map(a => a.idAcc2)]
@@ -93,7 +143,8 @@ function Chat() {
             setNameShop(shopBoss);
         }
         fetchData();
-    }, [chatBox]);
+    }, [mess]);
+    
     useEffect(() => {
         scrollToBottom()
     }, [chatBox]);
@@ -102,8 +153,7 @@ function Chat() {
         setChatBox(post.chat)
         setCssChat(post.id)
     }
-    //gửi tin nhắn
-    const [mess, setMess] = useState("");
+
     const sendMess = () => {
         let data = dataChat.find(e => e.id == cssChat);
         let today = new Date();
@@ -142,6 +192,7 @@ function Chat() {
             ]
 
         );
+        setRerende(rerende+1);
     }
 
     //hàm cuộn scroll
@@ -232,7 +283,7 @@ function Chat() {
                                     </div>
                                 return (a)
                             })}
-                            <div ref={messagesEndRef}/>
+                            <div ref={messagesEndRef} />
                         </div>
                         <div className="type_msg">
                             <div className="input_msg_write">
