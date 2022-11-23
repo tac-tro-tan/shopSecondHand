@@ -39,12 +39,15 @@ function ListItem({ listItem, sell }) {
                             <div className="col my-3" key={index}>
                                 <Link to={sell ? generatePath("/chitietdonban/:idb", { idb: post.id.idSP })
                                     : generatePath("/chitiet/:idd", { idd: post.id.idSP })}>
+
                                     <div className="card absolute" style={{ width: "15rem", height: "20rem" }}>
+
                                         <img className="card-img-top" style={{ width: "15rem", height: "13rem" }}
                                             src={post.data.image[post.data.image.length - 1]} alt="Card"></img>
+
                                         <div className="card-body" style={{ textAlign: "start" }}>
                                             <small className="card-title">{post.data.title}</small>
-                                            <strong style={{color:"red"}} className="card-text price2">{post.data.price}đ</strong>
+                                            <strong style={{ color: "red" }} className="card-text price2">{post.data.price}đ</strong>
                                             <sub className="card-text price1">khu vực: {post.data.city} </sub>
                                         </div>
                                     </div>

@@ -3,37 +3,51 @@ import styled from "styled-components";
 // Components
 import FullButton from "../Buttons/FullButton";
 // Assets
-import HeaderImage from "../../assets/img/header-img.png";
+import HeaderImage2 from "../../assets/img/header-img2.png";
 import QuotesIcon from "../../assets/svg/Quotes";
 import Dots from "../../assets/svg/Dots";
+import { useSelector } from "react-redux";
+import { selectCustomer } from "../../store/userSlice";
+import { Link } from "react-router-dom";
 
 export default function Header() {
+
+  const { title,id } = useSelector(selectCustomer);
+
   return (
     <Wrapper id="home" className="container flexSpaceCenter">
       <LeftSide className="flexCenter">
         <div>
-          <h1 className="extraBold font60">We are Digital Agency.</h1>
+          <h1 className="extraBold font60">Kết nối trao tay</h1>
           <HeaderP className="font13 semiBold">
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-            voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+            Mua bán đồ cũ giá rẻ. Bạn có thể đăng tin bán hoàn toàn miễn phí
           </HeaderP>
-          <BtnWrapper>
-            <FullButton title="Get Started" />
-          </BtnWrapper>
+          <div className="d-flex">
+            <BtnWrapper className="me-5">
+              <Link to="/home">
+                <FullButton title="Mua" />
+              </Link>
+            </BtnWrapper>
+            <BtnWrapper>
+              <Link to={title?"/danhsachbanhang/"+id:"/dangnhap"}>
+                <FullButton title="Bán" />
+              </Link>
+            </BtnWrapper>
+          </div>
         </div>
       </LeftSide>
       <RightSide>
         <ImageWrapper>
-          <Img className="radius8" src={HeaderImage} alt="office" style={{zIndex: 9}} />
+          <Img className="radius8" src={HeaderImage2} alt="office" style={{ zIndex: 2 }} />
           <QuoteWrapper className="flexCenter darkBg radius8">
             <QuotesWrapper>
               <QuotesIcon />
             </QuotesWrapper>
             <div>
               <p className="font15 whiteColor">
-                <em>Friends, such as we desire, are dreams and fables. Friendship demands the ability to do without it.</em>
+                <em>Xin chào, hôm nay bạn cần gì?</em>
               </p>
-              <p className="font13 orangeColor textRight" style={{marginTop: '10px'}}>Ralph Waldo Emerson</p>
+              <p className="font13 orangeColor textRight">Bùi Thành Lâm</p>
             </div>
           </QuoteWrapper>
           <DotsWrapper>
@@ -48,9 +62,8 @@ export default function Header() {
 
 
 const Wrapper = styled.section`
-  padding-top: 80px;
+  padding-top: 120px;
   width: 100%;
-  min-height: 840px;
   @media (max-width: 960px) {
     flex-direction: column;
   }

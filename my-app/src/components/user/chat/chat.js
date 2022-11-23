@@ -6,7 +6,7 @@ import { selectCustomer } from "../../../store/userSlice";
 import './chat.css'
 function Chat() {
     //hàm rerender khi chat/chạy trang này để reload dữ liệu chat
-    const [rerende,setRerende] = useState(0);
+    const [rerende, setRerende] = useState(0);
     //lấy giá trị id trên thanh path
     const location = useLocation()
     const idChater = location.pathname.replace("/chat/", "");
@@ -74,7 +74,7 @@ function Chat() {
             "cart": []
         }
     ]);
-    // dánh sách sản phẩm của chủ cửa hàng
+    // dánh sách chat lít item
     useEffect(() => {
         const fetchData = async () => {
             const requestOptions = {
@@ -90,15 +90,20 @@ function Chat() {
                 new Date(b.chat[b.chat.length - 1].time2 + " " + b.chat[b.chat.length - 1].time) -
                 new Date(a.chat[a.chat.length - 1].time2 + " " + a.chat[a.chat.length - 1].time)));
             //id người chat để xác định boxchat
+            //bước 1: tìm đoạn chat
             let k1 = listItem.findIndex(a => a.idAcc1 == idChater && a.idAcc2 == id);
             if (k1 == -1) k1 = listItem.findIndex(a => a.idAcc2 == idChater && a.idAcc1 == id);
+            console.log(listItem[0]);
+            // bước 2: 2 người chat là 1 người thì
             if (idChater == id) {
                 setChatBox(listItem[0].chat);
                 setCssChat(listItem[0].id);
             }
+            //2 người chat bình thường thì
             else if (k1 != -1) {
                 setChatBox(listItem[k1].chat);
                 setCssChat(listItem[k1].id);
+                //2 người chưa từng chat với nhau thì
             } else {
                 let today = new Date();
                 let time21 = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -144,7 +149,7 @@ function Chat() {
         }
         fetchData();
     }, [mess]);
-    
+
     useEffect(() => {
         scrollToBottom()
     }, [chatBox]);
@@ -192,7 +197,7 @@ function Chat() {
             ]
 
         );
-        setRerende(rerende+1);
+        setRerende(rerende + 1);
     }
 
     //hàm cuộn scroll

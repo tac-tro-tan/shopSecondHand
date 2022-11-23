@@ -25,24 +25,15 @@ import { Helmet } from "react-helmet";
 import Landing from "./screens/Landing.jsx";
 import "./App.css";
 import TopNavbar from './componentsLanding/Nav/TopNavbar';
-import { FaArrowAltCircleUp } from 'react-icons/fa';
 
 function App() {
 
   const { title } = useSelector(selectCustomer);
 
-  //scroll on top
-  const onTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
   return (
     <Router>
       <TopNavbar />
       <div className='minibody'>
-        <button className='onTop' onClick={onTop}>
-          <FaArrowAltCircleUp/>
-        </button>
         <Routes>
           <Route path="tintuc" element={
             <>
@@ -54,9 +45,9 @@ function App() {
               <Landing />
             </>
           } />
-          <Route path="home" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           {/* sửa mọi đường dẫn vớ vẩn thành /home */}
-          <Route path="*" element={<Navigate replace to="/home" />} />
+          <Route path="*" element={<Navigate replace to="/tintuc" />} />
           <Route exact path="/dangnhap" element={<Login />} />
           <Route path="/chitiet/:idd" element={<ProductDetails />} />
           <Route exact path="/danhsachbanhang/:idc" element={<Sell />} />

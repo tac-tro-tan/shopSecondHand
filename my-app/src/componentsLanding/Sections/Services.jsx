@@ -2,15 +2,26 @@ import React from "react";
 import styled from "styled-components";
 // Components
 import ClientSlider from "../Elements/ClientSlider";
-import ServiceBox from "../Elements/ServiceBox";
 import FullButton from "../Buttons/FullButton";
+import ProjectBox from "../Elements/ProjectBox";
 // Assets
 import AddImage1 from "../../assets/img/add/1.png";
 import AddImage2 from "../../assets/img/add/2.png";
 import AddImage3 from "../../assets/img/add/3.png";
 import AddImage4 from "../../assets/img/add/4.png";
 
+import ProjectImg1 from "../../assets/img/projects/1.png";
+import ProjectImg2 from "../../assets/img/projects/2.png";
+import ProjectImg3 from "../../assets/img/projects/3.png";
+
 export default function Services() {
+
+  const mangProject = [
+    { img: ProjectImg1, title: "Ô tô", price: 23423423, city: "Hà Nội" },
+    { img: ProjectImg2, title: "Ô tô", price: 23423423, city: "Hà Nội" },
+    { img: ProjectImg3, title: "Ô tô", price: 23423423, city: "Hà Nội" }
+  ]
+
   return (
     <Wrapper id="services">
       <div className="lightBg" style={{ padding: "50px 0" }}>
@@ -21,39 +32,26 @@ export default function Services() {
       <div className="whiteBg" style={{ padding: "60px 0" }}>
         <div className="container">
           <HeaderInfo>
-            <h1 className="font40 extraBold">Our Awesome Services</h1>
+            <h1 className="font40 extraBold">Tin đăng nổi bật</h1>
             <p className="font13">
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+              Tin đăng được hiển thị nổi bật hơn, xuất hiện ở vị trí ưu tiên,
               <br />
-              labore et dolore magna aliquyam erat, sed diam voluptua.
+              tần suất xuất hiện nhiều hơn và tốn tiền
             </p>
           </HeaderInfo>
-          <ServiceBoxRow className="flex">
-            <ServiceBoxWrapper>
-              <ServiceBox
-                icon="roller"
-                title="Graphic Design"
-                subtitle="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
-              />
-            </ServiceBoxWrapper>
-            <ServiceBoxWrapper>
-              <ServiceBox
-                icon="monitor"
-                title="Web Design"
-                subtitle="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore."
-              />
-            </ServiceBoxWrapper>
-            <ServiceBoxWrapper>
-              <ServiceBox
-                icon="browser"
-                title="Development"
-                subtitle="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat."
-              />
-            </ServiceBoxWrapper>
-            <ServiceBoxWrapper>
-              <ServiceBox icon="printer" title="Print" subtitle="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor." />
-            </ServiceBoxWrapper>
-          </ServiceBoxRow>
+          <div className="row textCenter">
+            {mangProject.map((chil) => (
+              <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <ProjectBox
+                  img={chil.img}
+                  title={chil.title}
+                  city={chil.city}
+                  price={chil.price}
+                  action={() => alert("clicked")}
+                />
+              </div>
+            ))}
+          </div>
         </div>
         <div className="lightBg">
           <div className="container">
@@ -65,7 +63,7 @@ export default function Services() {
                   Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
                   diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
                 </p>
-                <ButtonsRow className="flexNullCenter" style={{ margin: "30px 0"}}>
+                <ButtonsRow className="flexNullCenter" style={{ margin: "30px 0" }}>
                   <div style={{ width: "190px" }}>
                     <FullButton title="Get Started" action={() => alert("clicked")} />
                   </div>

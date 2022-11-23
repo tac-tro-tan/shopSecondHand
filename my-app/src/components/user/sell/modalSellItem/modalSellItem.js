@@ -3,12 +3,15 @@ import { Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { Zoom } from 'react-slideshow-image';
 
+import Sstorage from "../../../../fireBaseConfig.js";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 function ModalSellItem({ itemProduct, add }) {
 
     const navigate = useNavigate()
 
     // slide
-    const ref = useRef(null);
+    const ref1 = useRef(null);
     const [images, setImages] = useState([]);
     const [slideImages, setSlideImages] = useState([]);
     useEffect(() => {
@@ -28,7 +31,7 @@ function ModalSellItem({ itemProduct, add }) {
 
     function deleteImages() {
         setSlideImages([]);
-        ref.current.value = '';
+        ref1.current.value = '';
     }
 
     const zoomOutProperties = {
@@ -38,6 +41,42 @@ function ModalSellItem({ itemProduct, add }) {
         indicators: true,
         scale: 0.4,
         arrows: true
+    };
+    //submit
+    const submitt = () => {
+        handleUpload();
+    }
+
+
+    const handleUpload = () => {
+        if (!images) {
+            alert("Please upload an image first!");
+        }
+        images.map((file) => {
+            const storageRef = ref(Sstorage, `/file/${file.name}`);
+
+            // progress can be paused and resumed. It also exposes progress updates.
+            // Receives the storage reference and the file to upload.
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                    const percent = Math.round(
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                },
+                (err) => console.log(err),
+                () => {
+                    // download url
+                    getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                        console.log(url);
+                    });
+                }
+            );
+            return null;
+        })
+
     };
 
     return (
@@ -53,9 +92,7 @@ function ModalSellItem({ itemProduct, add }) {
                                 </button>
                             </div>
                             <div>
-                                <Link to="/">
-                                    <button className="btn outline btn-outline-primary me-4">Lưu</button>
-                                </Link>
+                                <button className="btn outline btn-outline-primary me-4" onClick={submitt}>Lưu</button>
                             </div>
                             {add ? <></> :
                                 <div>
@@ -99,7 +136,7 @@ function ModalSellItem({ itemProduct, add }) {
                         </div>
                     </div>
                     <div className="mt-3 anh">
-                        <input ref={ref} className="btn btn-outline-info" type="file"
+                        <input ref={ref1} className="btn btn-outline-info" type="file"
                             multiple accept="image/*" onChange={onImageChange} />
                         <div className="slide-container">
                             <Zoom {...zoomOutProperties}>

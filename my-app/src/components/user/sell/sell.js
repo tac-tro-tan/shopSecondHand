@@ -34,7 +34,7 @@ function Sell() {
             <div className="divv">
                 <div style={{ textAlign: "center" }}><h1>Cửa hàng của {title}:</h1></div>
             </div>
-            <div>
+            <div style={{ textAlign: "center" }}>
                 {id == idSPtoAcc ?
                     <Link to="/themdonban">
                         <button className="btn btn-outline-primary">Thêm đơn hàng</button>

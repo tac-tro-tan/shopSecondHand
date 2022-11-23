@@ -17,9 +17,6 @@ export default function Contact() {
       window.removeEventListener("scroll", () => setY(window.scrollY));
     };
   }, [y]);
-  const onTop=()=>{
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
 
   return (
     <Wrapper>
@@ -36,8 +33,8 @@ export default function Contact() {
               © {getCurrentYear()} - <span className="purpleColor font13">Chợ cũ</span> All Right Reserved
             </StyleP>
 
-            <div className="whiteColor animate pointer font13" onClick={onTop}>
-              Back to top
+            <div className="whiteColor animate pointer font13">
+              Email : thelamxy0@gmail.com
             </div>
           </InnerWrapper>
         </div>

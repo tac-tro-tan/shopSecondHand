@@ -58,13 +58,13 @@ export default function TopNavbar() {
                   <Link to="tintuc" style={{ padding: "10px 15px" }}>Tin tức</Link>
                 </li>
                 <li className="semiBold font15 pointer">
-                  <Link to="/" style={{ padding: "10px 15px" }}>Chợ</Link>
+                  <Link to="/home" style={{ padding: "10px 15px" }}>Chợ</Link>
                 </li>
                 <li className="semiBold font15 pointer">
                   <Link to={generatePath("/danhsachbanhang/:idc", { idc: id })}
                     style={{ padding: "10px 15px" }}
                   >
-                    Cửa hàng của tôi
+                    Cửa hàng
                   </Link>
                 </li>
                 <li className="semiBold font15 pointer">
@@ -82,7 +82,7 @@ export default function TopNavbar() {
                   <Link to="tintuc" style={{ padding: "10px 15px" }}>Tin tức</Link>
                 </li>
                 <li className="semiBold font15 pointer">
-                  <Link to="/" style={{ padding: "10px 15px" }}>Chợ</Link>
+                  <Link to="/home" style={{ padding: "10px 15px" }}>Chợ</Link>
                 </li>
               </React.Fragment>
             }
