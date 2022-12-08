@@ -5,10 +5,53 @@ import { Zoom } from 'react-slideshow-image';
 
 import Sstorage from "../../../../fireBaseConfig.js";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useSelector } from "react-redux";
+import { selectCustomer } from "../../../../store/userSlice.js";
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import Popup from "../../../deleteModal/Popup.js";
 
 function ModalSellItem({ itemProduct, add }) {
+    //thông báo
+    const createNotification = (type) => {
+        switch (type) {
+            case 'success':
+                NotificationManager.success('đã lưu', 'Thành công');
+                break;
+            case 'error':
+                NotificationManager.error('Đã xóa', 'Xóa', 3000);
+                break;
+            default:
+                alert("kill me, i'm here");
+        }
+    }
+    // id mình
+    const { id, jwtToken } = useSelector(selectCustomer);
 
     const navigate = useNavigate()
+
+    const [itemUpLoad, setItemUpLoad] = useState(itemProduct);
+
+    const [imgSting, setImgSting] = useState("string");
+
+    const [diaachi, setDiaachi] = useState({
+        xa1: "diachi[0]",
+        huyen1: "diachi[1]",
+        tinh1: "diachi[2]"
+    })
+
+    useEffect(() => {
+        setItemUpLoad(itemProduct);
+        setImgSting(itemProduct.image);
+        let diachi = itemProduct.address.split(", ");
+        setDiaachi(
+            {
+                xa1: diachi[0],
+                huyen1: diachi[1],
+                tinh1: diachi[2]
+            }
+        )
+    }, [itemProduct.id])
+
 
     // slide
     const ref1 = useRef(null);
@@ -16,17 +59,19 @@ function ModalSellItem({ itemProduct, add }) {
     const [slideImages, setSlideImages] = useState([]);
     useEffect(() => {
         if (images.length < 1) {
-            setSlideImages(itemProduct[0].data.image)
+            let ii = imgSting.split("$$$");
+            ii.pop();
+            setSlideImages(ii);
             return;
         };
+
         const newImageUrls = [];
         images.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
         setSlideImages(newImageUrls.map((img) => (`${img}`)))
-    }, [images, itemProduct]);
+    }, [images, itemUpLoad]);
 
     function onImageChange(e) {
         setImages([...e.target.files]);
-
     }
 
     function deleteImages() {
@@ -43,12 +88,52 @@ function ModalSellItem({ itemProduct, add }) {
         arrows: true
     };
     //submit
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const requestOptions = {
+                method: 'PUT',
+                headers: {
+                    'accept': ' text/plain',
+                    'Authorization': 'Bearer ' + jwtToken,
+                    'Content-Type': ' application/json-patch+json'
+                },
+                body: JSON.stringify(
+                    {
+                        "accountId": id,
+                        "name": itemUpLoad.name,
+                        "topic": itemUpLoad.topic,
+                        "area": itemUpLoad.area,
+                        "price": itemUpLoad.price,
+                        "address": diaachi.xa1 + ", " + diaachi.huyen1 + ", " + diaachi.tinh1,
+                        "phone": itemUpLoad.phone,
+                        "describe": itemUpLoad.describe,
+                        "image": imgSting
+                    })
+            };
+            const response = await fetch('https://localhost:7071/api/Item/' + itemProduct.id, requestOptions)
+            const data = await response.json();
+            console.log(data);
+        }
+        fetchData();
+    }, [imgSting])
+
     const submitt = () => {
         handleUpload();
     }
 
+    const handleChange = (e) => {
+        let k = e.target.value;
+        let j = e.target.attributes.id.value;
+        setItemUpLoad(prev => ({
+            ...prev,
+            [j]: k
+        })
+        )
+    }
 
     const handleUpload = () => {
+        let imgString = "";
         if (!images) {
             alert("Please upload an image first!");
         }
@@ -70,14 +155,69 @@ function ModalSellItem({ itemProduct, add }) {
                 () => {
                     // download url
                     getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                        console.log(url);
+                        imgString += url + "$$$";
+                        setImgSting(imgString);
                     });
                 }
             );
-            return null;
         })
-
     };
+
+    const [huyen, setHuyen] = useState([]);
+    const countryy = (city) => {
+        const fetchData = async () => {
+            const requestOptions = {
+                method: 'GET'
+            };
+            const response = await fetch('https://provinces.open-api.vn/api/?depth=2', requestOptions)
+            const data = await response.json();
+            const cti = data.filter(e => e.name === "Thành phố " + city)
+            setDiaachi(prev => ({
+                ...prev,
+                tinh1: cti[0].name
+            }))
+            setHuyen(cti[0].districts);
+        }
+        fetchData();
+    }
+
+    const [xaa, setXaa] = useState([])
+    const huyenn = (e) => {
+        const fetchData = async () => {
+            const requestOptions = {
+                method: 'GET'
+            };
+            const response = await fetch('https://provinces.open-api.vn/api/d/' + e + '?depth=2', requestOptions)
+            const data = await response.json();
+            setDiaachi(prev => ({
+                ...prev,
+                huyen1: data.name
+            }))
+
+            setXaa(data.wards);
+        }
+        fetchData();
+    }
+
+    const deletee = () => {
+        const fetchData = async () => {
+            const requestOptions = {
+                method: 'DELETE',
+                headers: {
+                    'accept': ' text/plain',
+                    'Authorization': 'Bearer ' + jwtToken
+                }
+            };
+            const response = await fetch('https://localhost:7071/api/Item/' + itemProduct.id, requestOptions)
+            const data = await response.json();
+        }
+        fetchData();
+        createNotification('error');
+        navigate(-1);
+    }
+    const [show, setShow] = useState(false);
+
+    const handleShow = () => setShow(!show);
 
     return (
         <Container>
@@ -92,44 +232,102 @@ function ModalSellItem({ itemProduct, add }) {
                                 </button>
                             </div>
                             <div>
-                                <button className="btn outline btn-outline-primary me-4" onClick={submitt}>Lưu</button>
+                                <button className="btn outline btn-outline-primary me-4" onClick={() => { submitt(); createNotification('success'); }}>Lưu</button>
                             </div>
                             {add ? <></> :
-                                <div>
-                                    <Link to="/">
-                                        <button className="btn outline btn-outline-danger">Xóa</button>
-                                    </Link>
-                                </div>
-                            }
+                                <React.Fragment>
+                                    <div>
+                                        <button className="btn outline btn-outline-success" onClick={() => { handleShow(); }}>Nổi bật</button>
+                                        <table border='0' cellpadding='10' cellspacing='0' align='center'>
+                                            <tr>
+                                                <td align='center'></td>
+                                            </tr>
+                                            <tr>
+                                                <td align='center'>
+                                                    <a href='https://www.paypal.com/vn/webapps/mpp/paypal-popup' title='How PayPal Works' onclick="javascript:window.open('https://www.paypal.com/vn/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;">
+                                                        <img src='https://www.paypalobjects.com/webstatic/en_AU/i/buttons/btn_paywith_primary_l.png' alt='Thanh toán bằng PayPal | Lớn' />
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div>
+                                        <button className="btn outline btn-outline-danger" onClick={() => { handleShow(); }}>Xóa</button>
+                                    </div>
+                                </React.Fragment>
 
+                            }
+                            <Popup handleDeleteTrue={deletee} handleShow={handleShow} show={show}></Popup>
 
                         </div>
+                        <label>làm nổi bật có trả phí</label>
                         <div className="box2 box-width-2 mx-auto col d-flex justify-content-center" >
                             <div className="d-flex flex-column justify-content-between w-100 mt-3">
                                 <div className="form-floating mb-3">
-                                    <input type="text" className="form-control" id="floatingInput"
-                                        placeholder="Tên sản phẩm" value={itemProduct[0].data.title} />
+                                    <input type="text" className="form-control" id="name"
+                                        placeholder="Tên sản phẩm" value={itemUpLoad.name}
+                                        onChange={(e) => handleChange(e)} />
                                     <label htmlFor="floatingInput" className="pr-3">Tên sản phẩm</label>
                                 </div>
                                 <div className="form-floating mb-3">
-                                    <input type="text" className="form-control" id="floatingInput"
-                                        placeholder="Giá sản phẩm"
-                                        value={`giá: ${itemProduct[0].data.price} đồng`} />
+                                    <input type="text" className="form-control" id="price"
+                                        placeholder="Giá sản phẩm" onChange={(e) => handleChange(e)}
+                                        value={itemUpLoad.price} />
                                     <label htmlFor="floatingInput" className="pr-3">Giá sản phẩm</label>
                                 </div>
                                 <div className="form-floating mb-3">
-                                    <input type="text" className="form-control" id="floatingInput"
-                                        placeholder="Loại sản phẩm" value={itemProduct[0].data.category} />
-                                    <label htmlFor="floatingInput" className="pr-3">Loại sản phẩm</label>
+                                    <select class="form-select" aria-label="Default select example"
+                                        id="topic" onChange={(e) => {
+                                            handleChange(e);
+                                        }}>
+                                        <option selected hidden>{itemUpLoad.topic}</option>
+                                        <option value="Xe cộ">Xe cộ</option>
+                                        <option value="Đồ điện tử">Đồ điện tử</option>
+                                        <option value="Đồ điện máy">Đồ điện máy</option>
+                                        <option value="Thời trang">Thời trang</option>
+                                        <option value="Đồ nội thất">Đồ nội thất</option>
+                                    </select>
                                 </div>
                                 <div className="form-floating mb-3">
-                                    <input type="text" className="form-control" id="floatingInput"
-                                        placeholder="Vị trí" value={itemProduct[0].data.address} />
-                                    <label htmlFor="floatingInput" className="pr-3">Vị trí</label>
+                                    <select class="form-select" aria-label="Default select example"
+                                        id="area" onChange={(e) => {
+                                            handleChange(e);
+                                            countryy(e.target.value);
+                                        }}>
+                                        <option selected hidden>{diaachi.tinh1}</option>
+                                        <option value="Hà Nội">Hà Nội</option>
+                                        <option value="Đà Nẵng">Đà Nẵng</option>
+                                        <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                                    </select>
                                 </div>
                                 <div className="form-floating mb-3">
-                                    <input type="text" className="form-control" id="floatingInput"
-                                        placeholder="Số điện thoại" value={`giá: ${itemProduct[0].data.price} đồng`} />
+                                    <select class="form-select" aria-label="Default select example"
+                                        id="area2" onChange={(e) => { huyenn(e.target.value) }}>
+                                        <option selected hidden>{diaachi.huyen1}</option>
+
+                                        {huyen.map((t, index) => (
+                                            <option value={t.code} key={index}>{t.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <select class="form-select" aria-label="Default select example"
+                                        id="area3" onChange={(e) => {
+                                            setDiaachi(prev => ({
+                                                ...prev,
+                                                xa1: e.target.value
+                                            }))
+                                        }}>
+                                        <option selected hidden>{diaachi.xa1}</option>
+                                        {xaa.map((t, index) => (
+                                            <option value={t.name} key={index}>{t.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="form-floating mb-3">
+                                    <input type="text" className="form-control" id="phone"
+                                        placeholder="Số điện thoại" value={itemUpLoad.phone}
+                                        onChange={(e) => handleChange(e)} />
                                     <label htmlFor="floatingInput" className="pr-3">Số điện thoại</label>
                                 </div>
                             </div>
@@ -141,8 +339,8 @@ function ModalSellItem({ itemProduct, add }) {
                         <div className="slide-container">
                             <Zoom {...zoomOutProperties}>
                                 {slideImages.map((each, index) => (
-                                    <img className="lazy rounded" key={index}
-                                        style={{ maxHeight: "22rem", width: "100%" }} src={each}
+                                    <img className="lazy rounded dilo" key={index}
+                                        src={each}
                                     />
                                 ))}
                             </Zoom>
@@ -161,13 +359,15 @@ function ModalSellItem({ itemProduct, add }) {
                             maxLength={5000}
                             placeholder="nội dung chi tiết sản phẩm"
                             className="form-control"
-                            id="exampleFormControlTextarea1"
+                            id="describe"
                             rows={10}
-                            value={itemProduct[0].data.description}
+                            value={itemUpLoad.describe}
+                            onChange={(e) => handleChange(e)}
                         />
                     </div>
                 </div>
             </div>
+            <NotificationContainer />
         </Container>
     );
 }

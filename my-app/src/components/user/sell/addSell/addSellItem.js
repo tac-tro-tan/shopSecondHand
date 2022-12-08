@@ -3,24 +3,20 @@ import ModalSellItem from "../modalSellItem/modalSellItem";
 import "./addSellItem.css";
 
 function AddSellItem() {
-    const itemProduct = [{
-        "id": {
-            "idSP": 0,
-            "SDT": "",
-            "idCustomer": 0
-        },
-        "data": {
-            "status": true,
-            "city": "",
-            "address": "",
-            "category": "",
-            "title": "",
-            "description": " ",
-            "image": [""],
-            "price": 0,
-            "siteURL": ""
-        }
-    }];
+    const itemProduct = {
+        "id": 1,
+        "accountId": "",
+        "name": "",
+        "topic": "",
+        "area": "",
+        "price": 0,
+        "address": "",
+        "phone": "",
+        "describe": "",
+        "status": 2,
+        "image": "",
+        "created": ""
+    };
 
     return (
         <div>

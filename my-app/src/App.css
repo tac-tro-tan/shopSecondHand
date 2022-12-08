@@ -18,3 +18,20 @@
   color: #cdd6c3ee;
   border: none;
 }
+
+
+/* product detail */
+
+.tourTitle {
+  margin-bottom: 20px;
+}
+.tourTitle h1 {
+  font-size: 28px;
+  line-height: 40px;
+  font-weight: 700;
+}
+/* sell */
+.dilo{
+  max-height: 22rem;
+  width: 100%;
+}

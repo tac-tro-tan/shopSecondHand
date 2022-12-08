@@ -17,8 +17,10 @@ import {
     FaHeart
 } from "react-icons/fa";
 import "./sidebar.css"
+import MultiRangeSlider from "./multiRangeSlider";
 
-const SiderBer = ({ image, collapsed, rtl, toggled, handleToggleSidebar }) => {
+const SiderBer = ({ image, collapsed, rtl, toggled, handleToggleSidebar, clickArea, clickTopic, clickPrice }) => {
+
     return (
         <ProSidebar
             image={false}
@@ -47,29 +49,45 @@ const SiderBer = ({ image, collapsed, rtl, toggled, handleToggleSidebar }) => {
 
             <SidebarContent>
                 <Menu iconShape="circle">
-                    <MenuItem
+                    <SubMenu
+                        title="Giá"
                         icon={<FaTachometerAlt />}
                         suffix={<span className="badge red">'new'</span>}
                     >
-                        Price
-                    </MenuItem>
-                    <div className="row">
-                        <input className="form-control form-control-sm col input1" type="text" placeholder="min"></input>
-                        <input className="form-control form-control-sm col input1" type="text" placeholder="max"></input>
-                    </div>
-                    {/* <MenuItem icon={<FaGem />}> 'min-max'</MenuItem> */}
+                        <MenuItem><input type="radio" id="hanoi" name="fav_language"
+                            value="all" onClick={(e) => { clickPrice(0, 100000000) }}></input>
+                            <label htmlFor="html">Tất cả</label><br></br></MenuItem>
+                        <MenuItem><input type="radio" id="hanoi" name="fav_language"
+                            value="hà nội" onClick={(e) => { clickPrice(0, 100000) }}></input>
+                            <label htmlFor="html">0-&gt;100K</label><br></br></MenuItem>
+                        <MenuItem><input type="radio" id="danang" name="fav_language"
+                            value="đà nẵng" onClick={(e) => { clickPrice(100000, 1000000) }}></input>
+                            <label htmlFor="html">100k-&gt;1tr</label><br></br></MenuItem>
+                        <MenuItem><input type="radio" id="hcm" name="fav_language"
+                            value="hồ chí minh" onClick={(e) => { clickPrice(1000000, 10000000) }}></input>
+                            <label htmlFor="html">1tr-&gt;10tr</label><br></br></MenuItem>
+                        <MenuItem><input type="radio" id="hcm" name="fav_language"
+                            value="hồ chí minh" onClick={(e) => { clickPrice(10000000, 10000000) }}></input>
+                            <label htmlFor="html">10tr{'<'} </label><br></br></MenuItem>
+                    </SubMenu>
                 </Menu>
                 <Menu iconShape="circle">
                     <SubMenu
                         suffix={<span className="badge yellow">3</span>}
-                        title="Location"
+                        title="Địa điểm"
                         icon={<FaRegLaughWink />}
                     >
-                        <MenuItem><input type="radio" id="hanoi" name="fav_language" value="hanoi"></input>
+                        <MenuItem><input type="radio" id="hanoi" name="fav_language"
+                            value="all" onClick={(e) => { clickArea(e.target.value) }}></input>
+                            <label htmlFor="html">Tất cả</label><br></br></MenuItem>
+                        <MenuItem><input type="radio" id="hanoi" name="fav_language"
+                            value="hà nội" onClick={(e) => { clickArea(e.target.value) }}></input>
                             <label htmlFor="html">Hà Nội</label><br></br></MenuItem>
-                        <MenuItem><input type="radio" id="danang" name="fav_language" value="danang"></input>
+                        <MenuItem><input type="radio" id="danang" name="fav_language"
+                            value="đà nẵng" onClick={(e) => { clickArea(e.target.value) }}></input>
                             <label htmlFor="html">Đà Nẵng</label><br></br></MenuItem>
-                        <MenuItem><input type="radio" id="hcm" name="fav_language" value="hcm"></input>
+                        <MenuItem><input type="radio" id="hcm" name="fav_language"
+                            value="hồ chí minh" onClick={(e) => { clickArea(e.target.value) }}></input>
                             <label htmlFor="html">Hồ Chí Minh</label><br></br></MenuItem>
                     </SubMenu>
                     {/* <SubMenu
@@ -81,9 +99,44 @@ const SiderBer = ({ image, collapsed, rtl, toggled, handleToggleSidebar }) => {
                         <MenuItem>'submenu' 2</MenuItem>
                         <MenuItem>'submenu' 3</MenuItem>
                     </SubMenu> */}
-                    <SubMenu title="Category" icon={<FaList />}>
-                        <MenuItem>'submenu' 1 </MenuItem>
-                        <MenuItem>'submenu' 2 </MenuItem>
+                    <SubMenu title="Thể loại" icon={<FaList />}>
+
+                        <MenuItem>
+                            <input type="radio" id="all" name="fav_language1"
+                                value="all" onClick={e => clickTopic(e.target.value)}></input>
+                            <label htmlFor="html">Tất cả</label><br></br>
+                        </MenuItem>
+
+                        <MenuItem>
+                            <input type="radio" id="xeco" name="fav_language1"
+                                value="Xe cộ" onClick={e => clickTopic(e.target.value)}></input>
+                            <label htmlFor="html">Xe cộ</label><br></br>
+                        </MenuItem>
+                        <MenuItem >
+                            <input type="radio" id="dodientu" name="fav_language1"
+                                value="Đồ điện tử" onClick={(e) => { clickTopic(e.target.value) }}></input>
+                            <label htmlFor="html">Đồ điện tử</label><br></br>
+                        </MenuItem>
+                        <MenuItem >
+                            <input type="radio" id="dodienmay" name="fav_language1"
+                                value="Đồ điện máy"
+                                onClick={(e) => { clickTopic(e.target.value) }}></input>
+                            <label htmlFor="html">Đồ điện máy</label><br></br>
+                        </MenuItem>
+                        <MenuItem >
+                            <input type="radio" id="thoitrang" name="fav_language1"
+                                value="Thời trang"
+                                onClick={(e) => { clickTopic(e.target.value) }}></input>
+                            <label htmlFor="html">Thời trang</label><br></br>
+                        </MenuItem>
+                        <MenuItem >
+                            <input type="radio" id="donoithat" name="fav_language1"
+                                value="Đồ nội thất"
+                                onClick={(e) => { clickTopic(e.target.value) }}></input>
+                            <label htmlFor="html">Đồ nội thất</label><br></br>
+                        </MenuItem>
+                        {/* <MenuItem>ô tô</MenuItem>
+                        <MenuItem>ô tô</MenuItem>
                         <SubMenu title={`'submenu' 3`}>
                             <MenuItem>'submenu' 3.1 </MenuItem>
                             <MenuItem>'submenu' 3.2 </MenuItem>
@@ -92,7 +145,7 @@ const SiderBer = ({ image, collapsed, rtl, toggled, handleToggleSidebar }) => {
                                 <MenuItem>'submenu' 3.3.2 </MenuItem>
                                 <MenuItem>'submenu' 3.3.3 </MenuItem>
                             </SubMenu>
-                        </SubMenu>
+                        </SubMenu> */}
                     </SubMenu>
                 </Menu>
             </SidebarContent>

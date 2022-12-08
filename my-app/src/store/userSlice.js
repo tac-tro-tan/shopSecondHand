@@ -12,9 +12,8 @@ const initialState = {
   "password": "AgVdMF",
   "phone": "7613685691",
   "address": "4996 Autumn Leaf Pass",
-  "gender": "Female",
-  "bDay": "4/21/2022",
-  "cart":[]
+  "url_Image": "string",
+  "jwtToken": ""
 };
 
 // Cấu hình slice
@@ -36,10 +35,9 @@ export const userSlice = createSlice({
       state.password = action.payload.password;
       state.phone = action.payload.phone;
       state.address = action.payload.address;
-      state.gender = action.payload.gender;
-
-      state.bDay = action.payload.bDay;
-      state.cart = action.payload.cart;
+      
+      state.url_Image = action.payload.url_Image;
+      state.jwtToken = action.payload.jwtToken;
     }
   }
 });

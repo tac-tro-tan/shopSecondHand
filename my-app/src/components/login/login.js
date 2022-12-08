@@ -1,84 +1,173 @@
+// @ts-nocheck
 import React, { useState } from "react";
-import { Button, Container, Form, FormGroup } from "react-bootstrap";
-import "./login.css";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { updateCustomer } from "../../store/userSlice";
-
+import './login.css'
 function Login() {
+
     const navigate = useNavigate();
-    //fetch dữ liệu database
+
+    const [resgiter, setRegiter] = useState({
+        "title": "",
+        "fisrtName": "",
+        "lastname": "",
+        "address": "",
+        "phone": "",
+        "url_Image": "string",
+        "email": "",
+        "password": "",
+        "confirmPassword": ""
+    })
+
     const [username, setUsername] = useState("");
     const [pass, setPass] = useState("")
     //lưu bằng redux
     const dispatch = useDispatch();
 
     function handleClick() {
-        const fetchData = async () => {
-            const requestOptions = {
-                method: 'GET'
-            };
-            const response = await fetch('http://localhost:3003/account', requestOptions)
-            const data = await response.json();
-            const customer = data.filter(a => (a.email == username && a.password == pass));
-            console.log(customer[0])
-            dispatch(updateCustomer(customer[0]));
+        const fetchData = async (req, res) => {
+            try {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(
+                        {
+                            "email": username,
+                            "password": pass
+                        })
+                };
+                const response = await fetch('https://localhost:7071/api/Account/authenticate', requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        dispatch(updateCustomer(data))
+                    });
+            } catch (error) {
+                res.send(error.stack);
+            }
         }
         fetchData();
         navigate("/");
+
     }
+
+    const [magin, setMargin] = useState(null)
+    const loginForm = (a) => {
+        setMargin({ marginLeft: a })
+    }
+
+    const handleChange = (e) => {
+        let k = e.target.value;
+        let j = e.target.attributes.id.value;
+        setRegiter(prev => ({
+            ...prev,
+            [j]: k
+        })
+        )
+    }
+    const handleSignup = () => {
+        const fetchData = async (req, res) => {
+            try {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'accept': '*/*',
+                        'Content-Type': 'application/json-patch+json'
+                    },
+                    body: JSON.stringify(resgiter)
+                };
+                const response = await fetch('https://localhost:7071/api/Account/register', requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                    });
+            } catch (error) {
+                res.send(error.stack);
+            }
+        }
+        fetchData();
+    }
+
     return (
-        <>
-            <div className="divv" style={{ textAlign: "center" }}><h1>Đăng nhập</h1></div>
-            <Container>
-                <div className="box2 box-width-2 mx-auto col d-flex justify-content-center" >
-                    <Form >
-                        <Form.Group>
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Email"
+        <div className="body1">
+            <div className="wrapper m-3">
+                <div className="title-text">
+                    <div className="title login" style={magin}>Login Form</div>
+                    <div className="title signup">Signup Form</div>
+                </div>
 
-                                value={username}
-                                onChange={e => setUsername(e.target.value)}
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Mật khẩu</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Nhập mật khẩu"
-                                required="required"
-                                value={pass}
-                                onChange={e => setPass(e.target.value)}
-                            />
-                        </Form.Group>
-                        <FormGroup>
-                            <Form.Check
-                                type="switch"
-                                id="custom-switch"
-                                label="Ghi nhớ"
-                            />
-                        </FormGroup>
-                    </Form>
-                    <div className="d-flex flex-column align-self-center">
-                        <div className="but2">
-                            <Button variant="primary" onClick={handleClick}>
-                                Xác nhận
-                            </Button>
-                        </div>
-                        <p className="forgot-password text-right">
-                            Quên <a href="#a">mật khẩu?</a>
-                        </p>
-                        <p className="forgot-password text-right">
-                            <a href="#a">Đăng ký</a>
-                        </p>
+                <div className="form-container">
+                    <div className="slide-controls">
+                        <input type="radio" name="slider" id="login" hidden />
+                        <input type="radio" name="slider" id="signup" hidden />
+                        <label htmlFor="login" className="slide login"
+                            onClick={() => loginForm('0%')}>Login</label>
+                        <label htmlFor="signup" className="slide signup"
+                            onClick={() => loginForm('-50%')}> Signup</label>
+                        <div className="slide-tab"></div>
                     </div>
 
+                    <div className="form-inner">
+                        <form className="login" style={magin}>
+                            <div className="field">
+                                <input type="email" placeholder="Email Address" value={username}
+                                    onChange={e => setUsername(e.target.value)} required />
+                            </div>
+                            <div className="field">
+                                <input type="password" placeholder="Password" value={pass}
+                                    onChange={e => setPass(e.target.value)} required minLength={6} />
+                            </div>
+                            <div className="field">
+                                <input type="submit" value="Login" onClick={handleClick} />
+                            </div>
+                            <div className="signup-link">
+                                Not a member? <a onClick={() => loginForm('-50%')}>Signup now</a>
+                            </div>
+                        </form>
+
+                        <form className="signup">
+                            <div className="field d-flex">
+                                <input type="text" placeholder="First Name" value={resgiter.fisrtName}
+                                    onChange={e => handleChange(e)} id="fisrtName" className="input2" required
+                                    pattern="[a-zA-Z0-9]+" />
+                                <input type="text" placeholder="Last Name" value={resgiter.lastname}
+                                    onChange={e => handleChange(e)} id="lastname" className="input2" required
+                                    pattern="[a-zA-Z0-9]+" />
+                            </div>
+                            <div className="field">
+                                <input type="text" placeholder="Title" value={resgiter.title}
+                                    onChange={e => handleChange(e)} id="title" required pattern="[a-zA-Z0-9]+" />
+                            </div>
+                            <div className="field">
+                                <input type="text" placeholder="Address" value={resgiter.address}
+                                    onChange={e => handleChange(e)} id="address" required pattern="[a-zA-Z0-9]+" />
+                            </div>
+                            <div className="field">
+                                <input type="text" placeholder="Phone" value={resgiter.phone}
+                                    onChange={e => handleChange(e)} id="phone" required pattern="(\+84|0)\d{9,10}" />
+                            </div>
+                            <div className="field">
+                                <input type="email" placeholder="Email Address" value={resgiter.email}
+                                    onChange={e => handleChange(e)} id="email" required />
+                            </div>
+                            <div className="field">
+                                <input type="password" placeholder="Password" value={resgiter.password}
+                                    onChange={e => handleChange(e)} id="password" required minLength={6} />
+                            </div>
+                            <div className="field">
+                                <input type="password" placeholder="Confirm password"
+                                    value={resgiter.confirmPassword}
+                                    onChange={e => handleChange(e)} id="confirmPassword" required minLength={6} />
+                            </div>
+                            <div className="field">
+                                <input type="submit" value="Signup" onClick={handleSignup} />
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </Container>
-        </>
+            </div>
+        </div>
     )
 }
+
 export default Login;

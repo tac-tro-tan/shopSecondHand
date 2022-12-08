@@ -7,32 +7,31 @@ function DetailSellItem() {
     const location = useLocation()
     const idSP = location.pathname.replace("/chitietdonban/", "");
     // dữ liệu sản phẩm
-    const [itemProduct, setItemProduct] = useState([{
-        "id": {
-            "idSP": 0,
-            "SDT": "",
-            "idCustomer": 0
-        },
-        "data": {
-            "status": true,
-            "city": "",
-            "address": "",
-            "category": "",
-            "title": "",
-            "description": " ",
-            "image": ["https://cdn.chotot.com/mK4xJxBedDtJWuqdwu_23RvMyoO7qm-bt4Gg5NpdVBs/preset:view/plain/2e29b541396806f88d579f1ba3e07b37-2794832054110024626.jpg"],
-            "price": 0,
-            "siteURL": "https://xe.chotot.com/mua-ban-oto-quan-cau-giay-ha-noi/100072055.htm"
-        }
-    }]);
+    const [itemProduct, setItemProduct] = useState({
+        "id": 1,
+        "accountId": "",
+        "name": "",
+        "topic": "",
+        "area": "",
+        "price": 0,
+        "address": "",
+        "phone": "",
+        "describe": "",
+        "status": 2,
+        "image": "",
+        "created": ""
+    });
     useEffect(() => {
         const fetchData = async () => {
             const requestOptions = {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'accept': ' text/plain',
+                }
             };
-            const response = await fetch('http://localhost:3003/sanPham', requestOptions)
+            const response = await fetch('https://localhost:7071/api/Item/' + idSP, requestOptions)
             const data = await response.json();
-            setItemProduct(data.filter(a => a.id.idSP == idSP));
+            setItemProduct(data);
         }
         fetchData();
     }, []);

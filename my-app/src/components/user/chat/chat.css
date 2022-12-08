@@ -105,7 +105,7 @@ img {
 }
 
 .inbox_chat {
-    height: 25rem;
+    height: 22rem;
     overflow-y: scroll;
 }
 
@@ -205,7 +205,7 @@ img {
 }
 
 .msg_history {
-    height: 25rem;
+    height: 22rem;
     overflow-y: auto;
 }
 .three-line-paragraph {

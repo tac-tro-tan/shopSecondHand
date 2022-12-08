@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { selectCustomer } from "../../../store/userSlice";
 
 function FeedBack() {
+
+    const { id,jwtToken } = useSelector(selectCustomer);
     //thông báo
     const createNotification = (type) => {
         switch (type) {
@@ -19,8 +21,6 @@ function FeedBack() {
                 alert("kill me, i'm here");
         }
     }
-    //thông tin của mình
-    const { id } = useSelector(selectCustomer);
     // tiêu đề và nội dung
     const [post, setPost] = useState({
         title: "",
@@ -40,7 +40,11 @@ function FeedBack() {
         const fetchData = async () => {
             const requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'accept': ' text/plain',
+                    'Authorization': 'Bearer ' + jwtToken,
+                    'Content-Type': 'application/json-patch+json'
+                 },
                 body: JSON.stringify(
                     {
                         "accountId": `${id}`,
@@ -49,7 +53,7 @@ function FeedBack() {
                     }
                 )
             };
-            const response = await fetch('http://localhost:3003/feedBack', requestOptions)
+            const response = await fetch('https://localhost:7071/api/Feedback', requestOptions)
             const data = await response.json();
             console.log(data);
             if (data !== null) createNotification('success');

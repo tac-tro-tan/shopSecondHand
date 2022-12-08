@@ -10,6 +10,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./style/flexboxgrid.min.css";
 import './style/index.css';
+import 'react-notifications/lib/notifications.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

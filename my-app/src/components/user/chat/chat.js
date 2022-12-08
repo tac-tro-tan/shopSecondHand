@@ -5,8 +5,6 @@ import { useLocation } from "react-router-dom";
 import { selectCustomer } from "../../../store/userSlice";
 import './chat.css'
 function Chat() {
-    //hàm rerender khi chat/chạy trang này để reload dữ liệu chat
-    const [rerende, setRerende] = useState(0);
     //lấy giá trị id trên thanh path
     const location = useLocation()
     const idChater = location.pathname.replace("/chat/", "");
@@ -14,195 +12,223 @@ function Chat() {
     //cuộn thanh tin nhắn xuống dưới cùng để thấy dòng tin nhắn mới  vừa chat
     const messagesEndRef = useRef(null);
     //
-    const { id, title } = useSelector(selectCustomer);
-    //danh sách chat của mình
+    const { id, title, jwtToken } = useSelector(selectCustomer);
+    //danh sách chat của mình bên trái
     const [dataChat, setDataChat] = useState([
         {
             "id": 1,
-            "idAcc1": 6,
-            "idAcc2": 9,
-            "chat": [
+            "accountId1": "1c4ed8f5-67cc-483d-3b20-08dac91fa5f7",
+            "accountId2": "e8a513d1-250d-47ba-3b21-08dac91fa5f7",
+            "name1": "",
+            "name2": "",
+            "messages": [
                 {
-                    "user": "Ong",
-                    "content": "Bypass Trachea to Cutaneous, Open Approach",
-                    "time": "19:28:28",
-                    "time2": "2022-02-10"
-                },
-                {
-                    "user": "Cu",
-                    "content": "Reattachment of Common Bile Duct, Open Approach",
-                    "time": "9:37:21",
-                    "time2": "2022-08-16"
+                    "id": 3,
+                    "accountId": "9798ab46-ca9f-4735-3b22-08dac91fa5f7",
+                    "name": "Gang",
+                    "content": "hi chào cậu",
+                    "created": "2022-12-05T09:54:20.6779055"
                 }
-            ]
+            ],
+            "nameChat": ""
         }
     ]);
+
     //gửi tin nhắn
     const [mess, setMess] = useState("");
     //search item listchat
     const [query, setQuery] = useState("");
     //chat box (bên phải)
-    const [chatBox, setChatBox] = useState([
-        {
-            "user": "Ong",
-            "content": "BReattachment of Common Bile Duct, Open Approach",
-            "time": "19:28:28",
-            "time2": "2022-02-10"
-        },
-        {
-            "user": "Cu",
-            "content": "Reattachment of Common Bile Duct, Open Approach",
-            "time": "9:37:21",
-            "time2": "2022-08-16"
-        }
-    ]);
-    //thêm class đậm màu khi click vào danh sách chat
-    const [cssChat, setCssChat] = useState(0);
-    //danh sách tên các chater với mình
-    const [nameShop, setNameShop] = useState([
-        {
-            "id": 4,
-            "title": "Gang",
-            "first_name": "Earl",
-            "last_name": "Ayrton",
-            "email": "eayrton3@merriam-webster.com",
-            "password": "SBZEwl0WDm",
-            "phone": "6734248097",
-            "address": "8130 Main Drive",
-            "gender": "Male",
-            "bDay": "12/28/2021",
-            "cart": []
-        }
-    ]);
+    const [chatBox, setChatBox] = useState({
+        "id": 3,
+        "accountId1": "1c4ed8f5-67cc-483d-3b20-08dac91fa5f7",
+        "accountId2": "9798ab46-ca9f-4735-3b22-08dac91fa5f7",
+        "name1": "",
+        "name2": "",
+        "messages": [
+            {
+                "id": 3,
+                "accountId": "9798ab46-ca9f-4735-3b22-08dac91fa5f7",
+                "name": "Gang",
+                "content": "hi chào cậu",
+                "created": "2022-12-05T09:54:20.6779055",
+                "time": ""
+            }
+        ]
+    });
+
     // dánh sách chat lít item
     useEffect(() => {
         const fetchData = async () => {
             const requestOptions = {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'accept': ' text/plain',
+                    'Authorization': 'Bearer ' + jwtToken
+                }
             };
-            const response = await fetch('http://localhost:3003/chatted', requestOptions)
+            const response = await fetch('https://localhost:7071/api/Chat/get all?accountId=' + id, requestOptions)
             const data = await response.json();
-            const listItem = data.filter(a => a.idAcc1 == id || a.idAcc2 == id);
-            listItem.forEach(e => {
-                e.chat.sort((b, a) => (new Date(b.time2 + " " + b.time) - new Date(a.time2 + " " + a.time)));
+            data.forEach(x => {
+                if (x.name1 != title) x.nameChat = x.name1;
+                if (x.name2 != title) x.nameChat = x.name2;
             });
-            listItem.sort((a, b) => (
-                new Date(b.chat[b.chat.length - 1].time2 + " " + b.chat[b.chat.length - 1].time) -
-                new Date(a.chat[a.chat.length - 1].time2 + " " + a.chat[a.chat.length - 1].time)));
-            //id người chat để xác định boxchat
-            //bước 1: tìm đoạn chat
-            let k1 = listItem.findIndex(a => a.idAcc1 == idChater && a.idAcc2 == id);
-            if (k1 == -1) k1 = listItem.findIndex(a => a.idAcc2 == idChater && a.idAcc1 == id);
-            console.log(listItem[0]);
-            // bước 2: 2 người chat là 1 người thì
+            setDataChat(data);
+            const acc = data.map(x => {
+                if (x.accountId1 != id) return x.accountId1;
+                if (x.accountId2 != id) return x.accountId2;
+                return null;
+            })
+            const numm = acc.indexOf(idChater);
+            //nếu nhấn vào mục tin nhắn trên navbar
             if (idChater == id) {
-                setChatBox(listItem[0].chat);
-                setCssChat(listItem[0].id);
-            }
-            //2 người chat bình thường thì
-            else if (k1 != -1) {
-                setChatBox(listItem[k1].chat);
-                setCssChat(listItem[k1].id);
-                //2 người chưa từng chat với nhau thì
+                setChatBox(data[0]);
+            }//nếu nhấn vào mục chat với người bán và đã có đoạn chat
+            else if (numm != -1) {
+                setChatBox(data[numm]);
             } else {
-                let today = new Date();
-                let time21 = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-                let time1 = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                fetch('http://localhost:3003/chatted', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        "idAcc1": Number(id),
-                        "idAcc2": Number(idChater),
-                        "chat": [
-                            {
-                                "user": `${title}`,
-                                "content": `chào bạn`,
-                                "time": `${time1}`,
-                                "time2": `${time21}`
-                            }
-                        ]
-                    }),
-                    headers: {
-                        'Content-type': 'application/json; charset=UTF-8',
-                    },
-                })
-                    .then((response) => response.json())
-                    .then((json) => setCssChat(json.id));
-                setChatBox([{
-                    "user": `${title}`,
-                    "content": `chào bạn`,
-                    "time": `${time1}`,
-                    "time2": `${time21}`
-                }]);
-            }
-            setDataChat(listItem);
-            //
-            const dataShopBoss = [...listItem.map(a => a.idAcc1), ...listItem.map(a => a.idAcc2)]
+                //chưa thì tạo đoạn chat mới
+                const fetchData = async (req, res) => {
+                    try {
+                        //tạo đoạn chat mới
+                        const requestOptions = {
+                            method: 'POST',
+                            headers: {
+                                'accept': ' text/plain',
+                                'Authorization': 'Bearer ' + jwtToken,
+                                'Content-Type': ' application/json-patch+json'
+                            },
+                            body: JSON.stringify(
+                                {
+                                    "accountId1": id,
+                                    "accountId2": idChater
+                                })
+                        };
+                        const response = await fetch('https://localhost:7071/api/Chat/add', requestOptions)
+                        const data = await response.json();
 
-            const requestOptions2 = {
-                method: 'GET'
-            };
-            const response2 = await fetch('http://localhost:3003/account', requestOptions2)
-            const data2 = await response2.json();
-            const shopBoss = data2.filter(a => dataShopBoss.includes(a.id));
-            setNameShop(shopBoss);
+                        //thêm 1 câu chat "hi chào cậu"
+                        const requestOptions2 = {
+                            method: 'POST',
+                            headers: {
+                                'accept': ' text/plain',
+                                'Authorization': 'Bearer ' + jwtToken,
+                                'Content-Type': ' application/json-patch+json'
+                            },
+                            body: JSON.stringify(
+                                {
+                                    "idChat": id,
+                                    "message": "hi chào cậu"
+                                })
+                        };
+                        const response2 = await fetch('https://localhost:7071/api/Chat/chat?id=' + data.id, requestOptions2)
+                        const data2 = await response2.json();
+
+                        setChatBox(data2);
+                    } catch (error) {
+                        res.send(error.stack);
+                    }
+                }
+                fetchData();
+            }
         }
         fetchData();
-    }, [mess]);
+    }, []);
 
+    //realtime cập nhật chat
     useEffect(() => {
-        scrollToBottom()
-    }, [chatBox]);
+        const intervalId = setInterval(() => {
+            const fetchData = async (req, res) => {
+                try {
+                    const requestOptions2 = {
+                        method: 'GET',
+                        headers: {
+                            'accept': ' text/plain',
+                            'Authorization': 'Bearer ' + jwtToken
+                        }
+                    };
+                    const response2 = await fetch('https://localhost:7071/api/Chat/get all?accountId=' + id, requestOptions2)
+                    const data2 = await response2.json();
+                    data2.forEach(x => {
+                        if (x.name1 != title) x.nameChat = x.name1;
+                        if (x.name2 != title) x.nameChat = x.name2;
+                        x.messages.forEach(y => {
+                            const word = new Date(y.created);
+                            const word2 = word.toString();
+                            const word3 = word2.split(" ");
+                            y.time = word3[4] + " " + word3[1] + "/" + word3[2] + "/" + word3[3];
+                        })
+                    });
+
+                    data2.sort(function (a, b) {
+                        a = new Date(a.messages[a.messages.length-1].created).getTime();
+                        b = new Date(b.messages[b.messages.length-1].created).getTime();
+                        return a > b ? -1 : a < b ? 1 : 0;
+                    })
+
+                    setDataChat(data2);
+                    data2.forEach(x => {
+                        if (x.id == chatBox.id) setChatBox(x);
+                    })
+                } catch (error) {
+                    res.send(error.stack);
+                }
+            }
+            fetchData();
+        }, 3000)
+        return () => clearInterval(intervalId);
+    })
     //hiện chat khi nhấn vào người chat
     const handleShow = (post) => {
-        setChatBox(post.chat)
-        setCssChat(post.id)
+        setChatBox(post)
     }
 
     const sendMess = () => {
-        let data = dataChat.find(e => e.id == cssChat);
-        let today = new Date();
-        let time2 = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        fetch('http://localhost:3003/chatted/' + cssChat, {
-            method: 'PATCH',
-            body: JSON.stringify({
-                chat: [
-                    ...data.chat,
-                    {
-                        "user": `${title}`,
-                        "content": `${mess}`,
-                        "time": `${time}`,
-                        "time2": `${time2}`
+        const fetchData = async (req, res) => {
+            try {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'accept': ' text/plain',
+                        'Authorization': 'Bearer ' + jwtToken,
+                        'Content-Type': 'application/json-patch+json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            "idChat": id,
+                            "message": mess
+                        })
+                };
+                const response = await fetch('https://localhost:7071/api/Chat/chat?id=' + chatBox.id, requestOptions)
+                const data = await response.json();
+
+                const requestOptions2 = {
+                    method: 'GET',
+                    headers: {
+                        'accept': ' text/plain',
+                        'Authorization': 'Bearer ' + jwtToken
                     }
-                ],
-            }),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        })
-            .then((response) => response.json())
-        // .then((json) => console.log(json));
-
+                };
+                const response2 = await fetch('https://localhost:7071/api/Chat/get all?accountId=' + id, requestOptions2)
+                const data2 = await response2.json();
+                data2.forEach(x => {
+                    if (x.name1 != title) x.nameChat = x.name1;
+                    if (x.name2 != title) x.nameChat = x.name2;
+                });
+                setDataChat(data2);
+                data2.forEach(x => {
+                    if (x.id == chatBox.id) setChatBox(x);
+                })
+            } catch (error) {
+                res.send(error.stack);
+            }
+        }
+        fetchData();
         setMess("");
-        setChatBox(prev =>
-            [
-                ...prev,
-                {
-                    "user": `${title}`,
-                    "content": `${mess}`,
-                    "time": `${time}`,
-                    "time2": `${time2}`
-                }
-            ]
-
-        );
-        setRerende(rerende + 1);
-    }
-
-    //hàm cuộn scroll
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        const scrollToBottom = () => {
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        }
+        scrollToBottom();
     }
 
     return (
@@ -227,33 +253,28 @@ function Chat() {
                         </div>
                         <div className="inbox_chat">
                             {dataChat.filter(post => {
-                                if (query === '' || post.chat[0].user.toLowerCase().includes(query.toLowerCase())) {
+                                if (query === '' || post.nameChat.toLowerCase().includes(query.toLowerCase())) {
                                     return post;
                                 }
                                 return null;
                             }).map((post, index) => (
-                                <div className={cssChat == post.id ? "chat_list active_chat" : "chat_list"}
+                                <div className={chatBox.id == post.id ? "chat_list active_chat" : "chat_list"}
                                     key={index}
-                                    onClick={() => {
-                                        handleShow(post);
-                                    }}>
+                                    onClick={() => { handleShow(post); }}
+                                >
                                     <div className="chat_people">
                                         <div className="chat_img">
                                             <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" />
                                         </div>
                                         <div className="chat_ib">
-                                            <h5>{post.idAcc1 == id ?
-                                                (nameShop.find(a => a.id == post.idAcc2) ?
-                                                    nameShop.find(a => a.id == post.idAcc2).title : null) :
-                                                (nameShop.find(a => a.id == post.idAcc1) ?
-                                                    nameShop.find(a => a.id == post.idAcc1).title : null)}
+                                            <h5>{post.nameChat}
                                                 <span className="chat_date">
-                                                    {post.chat[post.chat.length - 1].time + " " + post.chat[post.chat.length - 1].time2}
+                                                    {post.messages[post.messages.length - 1].time}
                                                 </span>
                                             </h5>
                                             <p className="three-line-paragraph">
-                                                <strong>{post.chat[post.chat.length - 1].user}</strong>
-                                                :{post.chat[post.chat.length - 1].content}
+                                                <strong>{post.messages[post.messages.length - 1].name}</strong>
+                                                :{post.messages[post.messages.length - 1].content}
                                             </p>
                                         </div>
                                     </div>
@@ -263,14 +284,14 @@ function Chat() {
                     </div>
                     <div className="mesgs">
                         <div className="msg_history">
-                            {chatBox.map((post, index) => {
+                            {chatBox.messages.map((post, index) => {
                                 let a;
-                                (post.user == title) ?
+                                (post.name == title) ?
                                     a =
                                     <div className="outgoing_msg" key={index}>
                                         <div className="sent_msg">
                                             <p>{post.content}</p>
-                                            <span className="time_date"> {post.time}    |    {post.time2}</span>
+                                            <span className="time_date"> {post.time}</span>
                                         </div>
                                     </div>
                                     :
@@ -282,7 +303,7 @@ function Chat() {
                                         <div className="received_msg">
                                             <div className="received_withd_msg">
                                                 <p>{post.content}</p>
-                                                <span className="time_date"> {post.time}    |    {post.time2}</span>
+                                                <span className="time_date"> {post.time}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -294,8 +315,7 @@ function Chat() {
                             <div className="input_msg_write">
                                 <input type="text" id="clickMe" placeholder="Type a message"
                                     className="write_msg" value={mess} onChange={e => setMess(e.target.value)} />
-                                <button className="msg_send_btn" type="button"
-                                    onClick={sendMess}>
+                                <button className="msg_send_btn" type="button" onClick={sendMess}>
                                     <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
                                 </button>
                             </div>
