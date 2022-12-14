@@ -55,7 +55,7 @@ const SiderBer = ({ image, collapsed, rtl, toggled, handleToggleSidebar, clickAr
                         suffix={<span className="badge red">'new'</span>}
                     >
                         <MenuItem><input type="radio" id="hanoi" name="fav_language"
-                            value="all" onClick={(e) => { clickPrice(0, 100000000) }}></input>
+                            value="all" onClick={(e) => { clickPrice(0, 1000000000) }}></input>
                             <label htmlFor="html">Tất cả</label><br></br></MenuItem>
                         <MenuItem><input type="radio" id="hanoi" name="fav_language"
                             value="hà nội" onClick={(e) => { clickPrice(0, 100000) }}></input>
@@ -67,7 +67,7 @@ const SiderBer = ({ image, collapsed, rtl, toggled, handleToggleSidebar, clickAr
                             value="hồ chí minh" onClick={(e) => { clickPrice(1000000, 10000000) }}></input>
                             <label htmlFor="html">1tr-&gt;10tr</label><br></br></MenuItem>
                         <MenuItem><input type="radio" id="hcm" name="fav_language"
-                            value="hồ chí minh" onClick={(e) => { clickPrice(10000000, 10000000) }}></input>
+                            value="hồ chí minh" onClick={(e) => { clickPrice(10000000, 1000000000) }}></input>
                             <label htmlFor="html">10tr{'<'} </label><br></br></MenuItem>
                     </SubMenu>
                 </Menu>

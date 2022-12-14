@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Container } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Zoom } from 'react-slideshow-image';
 
 import Sstorage from "../../../../fireBaseConfig.js";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useSelector } from "react-redux";
 import { selectCustomer } from "../../../../store/userSlice.js";
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import {  NotificationManager } from 'react-notifications';
 import Popup from "../../../deleteModal/Popup.js";
 
 function ModalSellItem({ itemProduct, add }) {
+    //lấy giá trị idSP
+    const location = useLocation()
+    const idSP = location.pathname.replace("/chitietdonban/", "");
+    
     //thông báo
     const createNotification = (type) => {
         switch (type) {
@@ -71,73 +75,13 @@ function ModalSellItem({ itemProduct, add }) {
     }, [images, itemUpLoad]);
 
     function onImageChange(e) {
-        setImages([...e.target.files]);
-    }
-
-    function deleteImages() {
-        setSlideImages([]);
-        ref1.current.value = '';
-    }
-
-    const zoomOutProperties = {
-        duration: 5000,
-        transitionDuration: 500,
-        infinite: true,
-        indicators: true,
-        scale: 0.4,
-        arrows: true
-    };
-    //submit
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const requestOptions = {
-                method: 'PUT',
-                headers: {
-                    'accept': ' text/plain',
-                    'Authorization': 'Bearer ' + jwtToken,
-                    'Content-Type': ' application/json-patch+json'
-                },
-                body: JSON.stringify(
-                    {
-                        "accountId": id,
-                        "name": itemUpLoad.name,
-                        "topic": itemUpLoad.topic,
-                        "area": itemUpLoad.area,
-                        "price": itemUpLoad.price,
-                        "address": diaachi.xa1 + ", " + diaachi.huyen1 + ", " + diaachi.tinh1,
-                        "phone": itemUpLoad.phone,
-                        "describe": itemUpLoad.describe,
-                        "image": imgSting
-                    })
-            };
-            const response = await fetch('https://localhost:7071/api/Item/' + itemProduct.id, requestOptions)
-            const data = await response.json();
-            console.log(data);
-        }
-        fetchData();
-    }, [imgSting])
-
-    const submitt = () => {
-        handleUpload();
-    }
-
-    const handleChange = (e) => {
-        let k = e.target.value;
-        let j = e.target.attributes.id.value;
-        setItemUpLoad(prev => ({
-            ...prev,
-            [j]: k
-        })
-        )
-    }
-
-    const handleUpload = () => {
+        let ii = [...e.target.files];
+        setImages(ii);
         let imgString = "";
-        if (!images) {
+        if (!ii) {
             alert("Please upload an image first!");
         }
-        images.map((file) => {
+        ii.map((file) => {
             const storageRef = ref(Sstorage, `/file/${file.name}`);
 
             // progress can be paused and resumed. It also exposes progress updates.
@@ -161,7 +105,66 @@ function ModalSellItem({ itemProduct, add }) {
                 }
             );
         })
+    }
+
+    function deleteImages() {
+        setSlideImages([]);
+        ref1.current.value = '';
+    }
+
+    const zoomOutProperties = {
+        duration: 5000,
+        transitionDuration: 500,
+        infinite: true,
+        indicators: true,
+        scale: 0.4,
+        arrows: true
     };
+    //submit
+
+
+    const submitt = () => {
+        if (add) {
+
+        } else {
+            const fetchData = async () => {
+                const requestOptions = {
+                    method: 'PUT',
+                    headers: {
+                        'accept': ' text/plain',
+                        'Authorization': 'Bearer ' + jwtToken,
+                        'Content-Type': ' application/json-patch+json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            "accountId": id,
+                            "name": itemUpLoad.name,
+                            "topic": itemUpLoad.topic,
+                            "area": itemUpLoad.area,
+                            "price": itemUpLoad.price,
+                            "address": diaachi.xa1 + ", " + diaachi.huyen1 + ", " + diaachi.tinh1,
+                            "phone": itemUpLoad.phone,
+                            "describe": itemUpLoad.describe,
+                            "image": imgSting
+                        })
+                };
+                const response = await fetch('https://localhost:7071/api/Item/' + itemProduct.id, requestOptions)
+                const data = await response.json();
+                console.log(data);
+            }
+            fetchData();
+        }
+    }
+
+    const handleChange = (e) => {
+        let k = e.target.value;
+        let j = e.target.attributes.id.value;
+        setItemUpLoad(prev => ({
+            ...prev,
+            [j]: k
+        })
+        )
+    }
 
     const [huyen, setHuyen] = useState([]);
     const countryy = (city) => {
@@ -235,32 +238,17 @@ function ModalSellItem({ itemProduct, add }) {
                                 <button className="btn outline btn-outline-primary me-4" onClick={() => { submitt(); createNotification('success'); }}>Lưu</button>
                             </div>
                             {add ? <></> :
-                                <React.Fragment>
-                                    <div>
-                                        <button className="btn outline btn-outline-success" onClick={() => { handleShow(); }}>Nổi bật</button>
-                                        <table border='0' cellpadding='10' cellspacing='0' align='center'>
-                                            <tr>
-                                                <td align='center'></td>
-                                            </tr>
-                                            <tr>
-                                                <td align='center'>
-                                                    <a href='https://www.paypal.com/vn/webapps/mpp/paypal-popup' title='How PayPal Works' onclick="javascript:window.open('https://www.paypal.com/vn/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;">
-                                                        <img src='https://www.paypalobjects.com/webstatic/en_AU/i/buttons/btn_paywith_primary_l.png' alt='Thanh toán bằng PayPal | Lớn' />
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div>
-                                        <button className="btn outline btn-outline-danger" onClick={() => { handleShow(); }}>Xóa</button>
-                                    </div>
-                                </React.Fragment>
+
+                                <div>
+                                    <button className="btn outline btn-outline-danger" onClick={() => { handleShow(); }}>Xóa</button>
+                                </div>
+
 
                             }
                             <Popup handleDeleteTrue={deletee} handleShow={handleShow} show={show}></Popup>
 
                         </div>
-                        <label>làm nổi bật có trả phí</label>
+                        
                         <div className="box2 box-width-2 mx-auto col d-flex justify-content-center" >
                             <div className="d-flex flex-column justify-content-between w-100 mt-3">
                                 <div className="form-floating mb-3">
@@ -276,17 +264,18 @@ function ModalSellItem({ itemProduct, add }) {
                                     <label htmlFor="floatingInput" className="pr-3">Giá sản phẩm</label>
                                 </div>
                                 <div className="form-floating mb-3">
-                                    <select class="form-select" aria-label="Default select example"
+                                    <select class="form-select" aria-label="Thể loại"
                                         id="topic" onChange={(e) => {
                                             handleChange(e);
                                         }}>
-                                        <option selected hidden>{itemUpLoad.topic}</option>
+                                        <option selected hidden >{itemUpLoad.topic}</option>
                                         <option value="Xe cộ">Xe cộ</option>
                                         <option value="Đồ điện tử">Đồ điện tử</option>
                                         <option value="Đồ điện máy">Đồ điện máy</option>
                                         <option value="Thời trang">Thời trang</option>
                                         <option value="Đồ nội thất">Đồ nội thất</option>
                                     </select>
+                                    <label htmlFor="floatingInput" className="pr-3">Thể loại</label>
                                 </div>
                                 <div className="form-floating mb-3">
                                     <select class="form-select" aria-label="Default select example"
@@ -299,6 +288,7 @@ function ModalSellItem({ itemProduct, add }) {
                                         <option value="Đà Nẵng">Đà Nẵng</option>
                                         <option value="Hồ Chí Minh">Hồ Chí Minh</option>
                                     </select>
+                                    <label htmlFor="floatingInput" className="pr-3">Thành phố</label>
                                 </div>
                                 <div className="form-floating mb-3">
                                     <select class="form-select" aria-label="Default select example"
@@ -309,6 +299,7 @@ function ModalSellItem({ itemProduct, add }) {
                                             <option value={t.code} key={index}>{t.name}</option>
                                         ))}
                                     </select>
+                                    <label htmlFor="floatingInput" className="pr-3">Quận, Huyện</label>
                                 </div>
                                 <div className="form-floating mb-3">
                                     <select class="form-select" aria-label="Default select example"
@@ -323,6 +314,7 @@ function ModalSellItem({ itemProduct, add }) {
                                             <option value={t.name} key={index}>{t.name}</option>
                                         ))}
                                     </select>
+                                    <label htmlFor="floatingInput" className="pr-3">Xã, Phường</label>
                                 </div>
                                 <div className="form-floating mb-3">
                                     <input type="text" className="form-control" id="phone"
@@ -349,6 +341,20 @@ function ModalSellItem({ itemProduct, add }) {
                             <div>
                                 <button className="btn btn-outline-danger" onClick={deleteImages}>Loại bỏ ảnh</button>
                             </div> : null}
+                            {itemProduct.status == 2 && 
+                            <table className="m-5" border='0' cellpadding='10' cellspacing='0' align='center'>
+                                <tr>
+                                    <td align='center'><label>làm nổi bật sản phẩm có trả phí</label></td>
+                                </tr>
+                                <tr>
+                                    <td align='center'>
+                                        <Link to={"/checkoutpay/"+idSP}>
+                                               <img src='https://www.paypalobjects.com/webstatic/en_AU/i/buttons/btn_paywith_primary_l.png' alt='Thanh toán bằng PayPal | Lớn' />
+                                        </Link>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
                     </div>
                 </div>
 
@@ -367,7 +373,6 @@ function ModalSellItem({ itemProduct, add }) {
                     </div>
                 </div>
             </div>
-            <NotificationContainer />
         </Container>
     );
 }

@@ -13,7 +13,6 @@ function AddSellItem() {
         "address": "",
         "phone": "",
         "describe": "",
-        "status": 2,
         "image": "",
         "created": ""
     };

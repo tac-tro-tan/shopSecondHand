@@ -4,9 +4,27 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateCustomer } from "../../store/userSlice";
 import './login.css'
+
+import { GoogleLogin, GoogleLogout } from "react-google-login";
+
 function Login() {
 
     const navigate = useNavigate();
+
+    const [ripgg, setRipgg] = useState({
+        name: "",
+        email: "",
+        url: ""
+    })
+
+    const responseGoogle = response => {
+        console.log(response);
+        setRipgg({
+            name: response.profileObj.name,
+            email: response.profileObj.email,
+            url: response.profileObj.imageUrl
+        })
+    };
 
     const [resgiter, setRegiter] = useState({
         "title": "",
@@ -123,6 +141,27 @@ function Login() {
                             <div className="signup-link">
                                 Not a member? <a onClick={() => loginForm('-50%')}>Signup now</a>
                             </div>
+                            <div className="field">
+                                <GoogleLogin
+                                    clientId="732917656903-hf5ng2p9756s7g611tns6l9jq6eeqamq.apps.googleusercontent.com"
+                                    buttonText="Login"
+                                    onSuccess={responseGoogle}
+                                    onFailure={responseGoogle}
+                                    cookiePolicy={"single_host_origin"}
+                                />
+                            </div>
+                            {/* <div>
+                                <div>
+                                    <h2>Welcome {ripgg.name}</h2>
+                                    <h2>Email: {ripgg.email}</h2>
+                                    <img src={ripgg.url} alt={ripgg.name} />
+                                    <br />
+                                    <GoogleLogout
+                                        clientId="732917656903-hf5ng2p9756s7g611tns6l9jq6eeqamq.apps.googleusercontent.com"
+                                        buttonText="Logout"
+                                    />
+                                </div>
+                            </div> */}
                         </form>
 
                         <form className="signup">

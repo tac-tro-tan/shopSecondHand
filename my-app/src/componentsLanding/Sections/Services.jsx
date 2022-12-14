@@ -4,23 +4,55 @@ import styled from "styled-components";
 import ClientSlider from "../Elements/ClientSlider";
 import FullButton from "../Buttons/FullButton";
 import ProjectBox from "../Elements/ProjectBox";
-// Assets
-import AddImage1 from "../../assets/img/add/1.png";
-import AddImage2 from "../../assets/img/add/2.png";
-import AddImage3 from "../../assets/img/add/3.png";
-import AddImage4 from "../../assets/img/add/4.png";
 
-import ProjectImg1 from "../../assets/img/projects/1.png";
-import ProjectImg2 from "../../assets/img/projects/2.png";
-import ProjectImg3 from "../../assets/img/projects/3.png";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectCustomer } from "../../store/userSlice";
 
 export default function Services() {
 
-  const mangProject = [
-    { img: ProjectImg1, title: "Ô tô", price: 23423423, city: "Hà Nội" },
-    { img: ProjectImg2, title: "Ô tô", price: 23423423, city: "Hà Nội" },
-    { img: ProjectImg3, title: "Ô tô", price: 23423423, city: "Hà Nội" }
+  const { title,id } = useSelector(selectCustomer);
+
+  const imggg = [
+    "https://firebasestorage.googleapis.com/v0/b/muabandocu.appspot.com/o/file%2F1d984e0b9b5d072ce997be13e5f8e8c2-2795651272731945424.jpg?alt=media&token=7a00ba4c-6940-450b-87eb-262884d5a7ad",
+    "https://firebasestorage.googleapis.com/v0/b/muabandocu.appspot.com/o/file%2F29f61d2380dc31b5b87b32ac6d7871ab-2774343780256170510.jpg?alt=media&token=2d00a4cb-97a8-4e02-b763-4047a0fa8e78",
+    "https://firebasestorage.googleapis.com/v0/b/muabandocu.appspot.com/o/file%2F1c3717df1b6ad23ffe4d3d42c02374ef-2791125198423456545.jpg?alt=media&token=a324a609-ac60-4976-83b4-08a154ab8b54",
+    "https://firebasestorage.googleapis.com/v0/b/muabandocu.appspot.com/o/file%2F2e29b541396806f88d579f1ba3e07b37-2794832054110024626.jpg?alt=media&token=b7cace3a-4d5b-418e-87ce-cdbbc1c45980"
   ]
+
+  const [state, setState] = useState({
+    data: [],
+    totalRecords: 0
+  })
+
+  useEffect(() => {
+    const fetchData = async (req, res) => {
+      try {
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'accept': ' text/plain',
+            'Content-Type': 'application/json-patch+json'
+          },
+          body: JSON.stringify({
+            "page": 0,
+            "pageSize": 3
+          })
+        };
+        const response = await fetch('https://localhost:7071/api/Item/getpay', requestOptions)
+        const data = await response.json();
+        setState({
+          data: data.results,
+          totalRecords: data.total
+        })
+        console.log(data);
+      } catch (error) {
+        res.send(error.stack);
+      }
+    }
+    fetchData();
+  }, [])
 
   return (
     <Wrapper id="services">
@@ -32,23 +64,24 @@ export default function Services() {
       <div className="whiteBg" style={{ padding: "60px 0" }}>
         <div className="container">
           <HeaderInfo>
-            <h1 className="font40 extraBold">Tin đăng nổi bật</h1>
+            <h1 className="font40 extraBold"> Các sản phẩm nổi bật nhất</h1>
             <p className="font13">
-              Tin đăng được hiển thị nổi bật hơn, xuất hiện ở vị trí ưu tiên,
+              Sản phẩm được hiển thị nổi bật hơn, xuất hiện ở vị trí ưu tiên,
               <br />
-              tần suất xuất hiện nhiều hơn và tốn tiền
+              tần suất xuất hiện nhiều hơn
             </p>
           </HeaderInfo>
           <div className="row textCenter">
-            {mangProject.map((chil) => (
+            {state.data.map((chil) => (
               <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <Link to={"/chitiet/"+chil.id}>
                 <ProjectBox
-                  img={chil.img}
-                  title={chil.title}
-                  city={chil.city}
+                  img={chil.image}
+                  title={chil.name}
+                  city={chil.area}
                   price={chil.price}
-                  action={() => alert("clicked")}
                 />
+                </Link>
               </div>
             ))}
           </div>
@@ -57,18 +90,23 @@ export default function Services() {
           <div className="container">
             <Advertising className="flexSpaceCenter">
               <AddLeft>
-                <h4 className="font15 semiBold">A few words about company</h4>
-                <h2 className="font40 extraBold">A Study of Creativity</h2>
+                <h4 className="font15 semiBold">kết nối tới mọi miền</h4>
+                <h2 className="font40 extraBold">Chợ cũ</h2>
                 <p className="font12">
-                  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
-                  diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+                  Từ mọi miền đất nước, chúng tôi giúp người bán và người mua đồ cũ liên lạc và trao đổi thông tin với nhau,
+                  để các bạn có thể mua bán trực tiếp với nhau
                 </p>
                 <ButtonsRow className="flexNullCenter" style={{ margin: "30px 0" }}>
                   <div style={{ width: "190px" }}>
-                    <FullButton title="Get Started" action={() => alert("clicked")} />
+                  <Link to="/home">
+                    <FullButton title="Mua" action={() => alert("clicked")} />
+                    </Link>
                   </div>
                   <div style={{ width: "190px", marginLeft: "15px" }}>
-                    <FullButton title="Contact Us" action={() => alert("clicked")} border />
+                  <Link to={title?"/danhsachbanhang/"+id:"/dangnhap"}>
+                
+                    <FullButton title="Bán" action={() => alert("clicked")} border />
+                    </Link>
                   </div>
                 </ButtonsRow>
               </AddLeft>
@@ -76,18 +114,18 @@ export default function Services() {
                 <AddRightInner>
                   <div className="flexNullCenter">
                     <AddImgWrapp1 className="flexCenter">
-                      <img src={AddImage1} alt="office" />
+                      <img src={imggg[0]} alt="office" style={{height:"406px",width:"285px"}}/>
                     </AddImgWrapp1>
                     <AddImgWrapp2>
-                      <img src={AddImage2} alt="office" />
+                      <img src={imggg[1]} alt="office" style={{height:"333px",width:"197px"}}/>
                     </AddImgWrapp2>
                   </div>
                   <div className="flexNullCenter">
                     <AddImgWrapp3>
-                      <img src={AddImage3} alt="office" />
+                      <img src={imggg[2]} alt="office" style={{height:"125px",width:"112px"}}/>
                     </AddImgWrapp3>
                     <AddImgWrapp4>
-                      <img src={AddImage4} alt="office" />
+                      <img src={imggg[3]} alt="office" style={{height:"224px",width:"197px"}}/>
                     </AddImgWrapp4>
                   </div>
                 </AddRightInner>

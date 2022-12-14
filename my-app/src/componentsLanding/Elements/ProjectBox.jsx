@@ -5,9 +5,9 @@ export default function ProjectBox({ img, title, city, price, action}) {
   return (
     <Wrapper>
       <ImgBtn className="aniamte pointer" onClick={action ? () => action() : null}>
-        <img className="radius8" src={img} alt="project"></img>
+        <img className="radius8" src={img} alt="project" style={{height:"45vh",width:"25vw"}}></img>
       </ImgBtn>
-      <h3 className="font20 extraBold">{title}</h3>
+      <h4 className="font15 extraBold">{title}</h4>
       <p className="font13" style={{color:"red"}}>{price} đ</p>
       <p className="font13">{city}</p>
     </Wrapper>

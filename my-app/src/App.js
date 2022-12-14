@@ -25,6 +25,8 @@ import { Helmet } from "react-helmet";
 import Landing from "./screens/Landing.jsx";
 import "./App.css";
 import TopNavbar from './componentsLanding/Nav/TopNavbar';
+import CheckOutPay from './components/user/sell/checkoutPay';
+import { NotificationContainer } from 'react-notifications';
 
 function App() {
 
@@ -67,6 +69,9 @@ function App() {
           <Route exact path="/chitietdonban/:idb" element={<Protected isLoggedIn={title}>
             <DetailSellItem />
           </Protected>} />
+          <Route exact path="/checkoutpay/:idb" element={<Protected isLoggedIn={title}>
+            <CheckOutPay />
+          </Protected>} />
           <Route exact path="/giohang" element={<Protected isLoggedIn={title}>
             <MyCart />
           </Protected>} />
@@ -77,6 +82,7 @@ function App() {
             <Chat />
           </Protected>} />
         </Routes>
+        <NotificationContainer />
       </div>
       <Footer />
     </Router>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Container, FloatingLabel, Form } from "react-bootstrap";
 import "./feedBack.css";
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { NotificationManager } from 'react-notifications';
 import { useSelector } from "react-redux";
 import { selectCustomer } from "../../../store/userSlice";
 
@@ -93,7 +93,6 @@ function FeedBack() {
                         </div>
                     </Form>
                 </div>
-                <NotificationContainer />
             </Container>
         </div>
     );

@@ -18,8 +18,8 @@ export default function Header() {
     <Wrapper id="home" className="container flexSpaceCenter">
       <LeftSide className="flexCenter">
         <div>
-          <h1 className="extraBold font60">Kết nối trao tay</h1>
-          <HeaderP className="font13 semiBold">
+          <h1 className=" font60">Kết nối trao tay</h1>
+          <HeaderP className="font13 ">
             Mua bán đồ cũ giá rẻ. Bạn có thể đăng tin bán hoàn toàn miễn phí
           </HeaderP>
           <div className="d-flex">

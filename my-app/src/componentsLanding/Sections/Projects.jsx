@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // Components
 import ProjectBox from "../Elements/ProjectBox";
@@ -11,88 +11,91 @@ import ProjectImg4 from "../../assets/img/projects/4.png";
 import ProjectImg5 from "../../assets/img/projects/5.png";
 import ProjectImg6 from "../../assets/img/projects/6.png";
 import AddImage2 from "../../assets/img/add/add2.png";
+import { Link } from "react-router-dom";
+import PaginationComponent from "../../components/pagination/paginationComponent";
 
 export default function Projects() {
+
+  const [pagee, setPagee] = useState(0);
+
+  // phân trang
+  const [state, setState] = useState({
+    data: [],
+    totalRecords: 0
+  })
+
+  const getPaginatedData = page => {
+    setPagee(page - 1)
+  }
+
+
+  useEffect(() => {
+    const fetchData = async (req, res) => {
+      try {
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'accept': ' text/plain',
+            'Content-Type': 'application/json-patch+json'
+          },
+          body: JSON.stringify({
+            "page": pagee,
+            "pageSize": 9
+          })
+        };
+        const response = await fetch('https://localhost:7071/api/Item/getpay', requestOptions)
+        const data = await response.json();
+        setState({
+          data: data.results,
+          totalRecords: data.total
+        })
+        console.log(data);
+      } catch (error) {
+        res.send(error.stack);
+      }
+    }
+    fetchData();
+  }, [pagee])
+
   return (
     <Wrapper id="projects">
       <div className="whiteBg">
         <div className="container">
           <HeaderInfo>
-            <h1 className="font40 extraBold">Our Awesome Projects</h1>
+            <h1 className="font40 extraBold">Một số sản phẩm nổi bật</h1>
             <p className="font13">
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+              ...
               <br />
-              labore et dolore magna aliquyam erat, sed diam voluptua.
+              ...
             </p>
           </HeaderInfo>
           <div className="row textCenter">
-            <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <ProjectBox
-                img={ProjectImg1}
-                title="Awesome Project"
-                city="Hà Nội"
-                price="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor."
-                action={() => alert("clicked")}
-              />
-            </div>
-            <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <ProjectBox
-                img={ProjectImg2}
-                title="Awesome Project"
-                city="Hà Nội"
-                price="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor."
-                action={() => alert("clicked")}
-              />
-            </div>
-            <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <ProjectBox
-                img={ProjectImg3}
-                title="Awesome Project"
-                city="Hà Nội"
-                price="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor."
-                action={() => alert("clicked")}
-              />
-            </div>
+            {state.data.map((chil) => (
+              <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                <Link to={"/chitiet/" + chil.id}>
+                  <ProjectBox
+                    img={chil.image}
+                    title={chil.name}
+                    city={chil.area}
+                    price={chil.price}
+                  />
+                </Link>
+              </div>
+            ))}
           </div>
-          <div className="row textCenter">
-            <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <ProjectBox
-                img={ProjectImg4}
-                title="Awesome Project"
-                city="Hà Nội"
-                price="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor."
-                action={() => alert("clicked")}
-              />
-            </div>
-            <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <ProjectBox
-                img={ProjectImg5}
-                title="Awesome Project"
-                city="Hà Nội"
-                price="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor."
-                action={() => alert("clicked")}
-              />
-            </div>
-            <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <ProjectBox
-                img={ProjectImg6}
-                title="Awesome Project"
-                city="Hà Nội"
-                price="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor."
-                action={() => alert("clicked")}
-              />
-            </div>
-          </div>
-          <div className="row flexCenter">
-            <div style={{ margin: "50px 0", width: "200px" }}>
-              <FullButton title="Load More" action={() => alert("clicked")} />
-            </div>
+          <div className="d-flex justify-content-around">
+            {state.totalRecords > 9 &&
+              <PaginationComponent
+                getAllData={getPaginatedData}
+                totalRecords={state.totalRecords}
+                itemsCountPerPage={9} />
+            }
           </div>
         </div>
       </div>
       <div className="lightBg">
         <div className="container">
-          <Advertising className="flexSpaceCenter">
+          {/* <Advertising className="flexSpaceCenter">
             <AddLeft>
               <AddLeftInner>
                 <ImgWrapper className="flexCenter">
@@ -116,7 +119,7 @@ export default function Projects() {
                 </div>
               </ButtonsRow>
             </AddRight>
-          </Advertising>
+          </Advertising> */}
         </div>
       </div>
     </Wrapper>
