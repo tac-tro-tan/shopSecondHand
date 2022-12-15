@@ -5,6 +5,10 @@ import { generatePath, Link } from "react-router-dom";
 import PaginationComponent from "../../pagination/paginationComponent";
 function ListItem({ listItem, sell, getPage }) {
     
+    const formatter = new Intl.NumberFormat('vi', {style : 'currency', currency : 'VND'});
+      
+      console.log(formatter.format(2500)); /* $2,500.00 */
+      
     return (
         <div className="row">
             {listItem.data.map((post, index) => (
@@ -20,7 +24,7 @@ function ListItem({ listItem, sell, getPage }) {
 
                                 <div className="card-body" style={{ textAlign: "start" }}>
                                     <small className="card-title">{post.name}</small>
-                                    <strong style={{ color: "red" }} className="card-text price2">{post.price}đ</strong>
+                                    <strong style={{ color: "red" }} className="card-text price2">{formatter.format(post.price)}</strong>
                                     <sub className="card-text price1">khu vực: {post.area} </sub>
                                 </div>
                             </div>

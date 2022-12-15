@@ -181,6 +181,7 @@ function Chat() {
     //hiện chat khi nhấn vào người chat
     const handleShow = (post) => {
         setChatBox(post)
+        console.log(post);
     }
 
     const sendMess = () => {

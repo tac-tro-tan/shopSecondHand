@@ -79,12 +79,8 @@ function ProductDetails() {
         console.log(itemProduct);
     }, []);
 
-    var title2 = String.raw`
-             ___| |_  ___  _____ __      _  ___  _____ ___
-            / __| __|/ _  |  __/ \ \ /\ / // _  |  __// __|
-            \__ | |_  (_| | |     \ V  V /  (_| | |   \__ |
-            |___/\__|\__,_|_|      \_/\_/  \__,_|_|   |___/
-    `;
+    const formatter = new Intl.NumberFormat('vi', {style : 'currency', currency : 'VND'});
+      
     // nội dung
     var content = String.raw`${itemProduct.describe}`;
 
@@ -254,7 +250,7 @@ function ProductDetails() {
                             <ul>
                                 <li>
                                     <div class="at">Giá: </div>
-                                    <div class="as">{itemProduct.price} đồng</div>
+                                    <div class="as">{formatter.format(itemProduct.price)}</div>
                                 </li>
                                 <li>
                                     <div class="at">Số điện thoại:</div>

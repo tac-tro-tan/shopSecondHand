@@ -125,7 +125,32 @@ function ModalSellItem({ itemProduct, add }) {
 
     const submitt = () => {
         if (add) {
-
+            const fetchData = async () => {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'accept': ' text/plain',
+                        'Authorization': 'Bearer ' + jwtToken,
+                        'Content-Type': ' application/json-patch+json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            "accountId": id,
+                            "name": itemUpLoad.name,
+                            "topic": itemUpLoad.topic,
+                            "area": itemUpLoad.area,
+                            "price": itemUpLoad.price,
+                            "address": diaachi.xa1 + ", " + diaachi.huyen1 + ", " + diaachi.tinh1,
+                            "phone": itemUpLoad.phone,
+                            "describe": itemUpLoad.describe,
+                            "image": imgSting
+                        })
+                };
+                const response = await fetch('https://localhost:7071/api/Item/add', requestOptions)
+                const data = await response.json();
+                console.log(data);
+            }
+            fetchData();
         } else {
             const fetchData = async () => {
                 const requestOptions = {
@@ -154,6 +179,7 @@ function ModalSellItem({ itemProduct, add }) {
             }
             fetchData();
         }
+        navigate(-1);
     }
 
     const handleChange = (e) => {
