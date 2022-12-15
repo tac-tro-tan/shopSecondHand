@@ -1,30 +1,27 @@
 // @ts-nocheck
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateCustomer } from "../../store/userSlice";
 import './login.css'
 
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import { gapi } from 'gapi-script';
 
 function Login() {
 
+    useEffect(() => {
+        function start() {
+            gapi.client.init({
+                clientId: "732917656903-hf5ng2p9756s7g611tns6l9jq6eeqamq.apps.googleusercontent.com",
+                scope: 'email',
+            });
+        }
+
+        gapi.load('client:auth2', start);
+    }, []);
+
     const navigate = useNavigate();
-
-    const [ripgg, setRipgg] = useState({
-        name: "",
-        email: "",
-        url: ""
-    })
-
-    const responseGoogle = response => {
-        console.log(response);
-        setRipgg({
-            name: response.profileObj.name,
-            email: response.profileObj.email,
-            url: response.profileObj.imageUrl
-        })
-    };
 
     const [resgiter, setRegiter] = useState({
         "title": "",
@@ -99,12 +96,73 @@ function Login() {
                     .then(data => {
                         console.log(data)
                     });
+
             } catch (error) {
                 res.send(error.stack);
             }
         }
         fetchData();
     }
+
+    // **you can access the token like this**
+    // const accessToken = gapi.auth.getToken().access_token;
+    // console.log(accessToken);
+
+    const onSuccess = responsee => {
+        console.log(responsee);
+        const fetchData = async (req, res) => {
+            try {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'accept': '*/*',
+                        'Content-Type': 'application/json-patch+json'
+                    },
+                    body: JSON.stringify({
+                        "title": responsee.profileObj.familyName,
+                        "fisrtName": responsee.profileObj.givenName,
+                        "lastname": responsee.profileObj.familyName,
+                        "address": "string",
+                        "phone": "string",
+                        "url_Image": responsee.profileObj.imageUrl,
+                        "email": responsee.profileObj.email,
+                        "password": "123456",
+                        "confirmPassword": "123456"
+                    })
+                };
+                const response = await fetch('https://localhost:7071/api/Account/register', requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                    });
+
+                const requestOptions2 = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(
+                        {
+                            "email": responsee.profileObj.email,
+                            "password": "123456"
+                        })
+                };
+                const response2 = await fetch('https://localhost:7071/api/Account/authenticate', requestOptions2)
+                    .then(response2 => response2.json())
+                    .then(data2 => {
+                        dispatch(updateCustomer(data2))
+                    });
+            } catch (error) {
+                res.send(error.stack);
+            }
+        }
+        fetchData();
+        navigate("/");
+    };
+    const onFailure = response => {
+        console.log('FAILED', response);
+    };
+    const onLogoutSuccess = () => {
+        console.log('SUCESS LOG OUT');
+    };
 
     return (
         <div className="body1">
@@ -143,25 +201,16 @@ function Login() {
                             </div>
                             <div className="field">
                                 <GoogleLogin
-                                    clientId="732917656903-hf5ng2p9756s7g611tns6l9jq6eeqamq.apps.googleusercontent.com"
-                                    buttonText="Login"
-                                    onSuccess={responseGoogle}
-                                    onFailure={responseGoogle}
-                                    cookiePolicy={"single_host_origin"}
+                                    clientId={"732917656903-hf5ng2p9756s7g611tns6l9jq6eeqamq.apps.googleusercontent.com"}
+                                    onSuccess={onSuccess}
+                                    onFailure={onFailure}
+                                />
+                                <GoogleLogout
+                                    clientId={"732917656903-hf5ng2p9756s7g611tns6l9jq6eeqamq.apps.googleusercontent.com"}
+                                    onLogoutSuccess={onLogoutSuccess}
                                 />
                             </div>
-                            {/* <div>
-                                <div>
-                                    <h2>Welcome {ripgg.name}</h2>
-                                    <h2>Email: {ripgg.email}</h2>
-                                    <img src={ripgg.url} alt={ripgg.name} />
-                                    <br />
-                                    <GoogleLogout
-                                        clientId="732917656903-hf5ng2p9756s7g611tns6l9jq6eeqamq.apps.googleusercontent.com"
-                                        buttonText="Logout"
-                                    />
-                                </div>
-                            </div> */}
+
                         </form>
 
                         <form className="signup">

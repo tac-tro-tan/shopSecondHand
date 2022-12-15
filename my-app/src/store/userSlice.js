@@ -6,8 +6,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   "id": 0,
   "title": "",
-  "first_name": "Ilysa",
-  "last_name": "Philcott",
+  "fisrtName": "Ilysa",
+  "lastname": "Philcott",
   "email": "iphilcott1@webs.com",
   "password": "AgVdMF",
   "phone": "7613685691",
@@ -28,8 +28,8 @@ export const userSlice = createSlice({
       // Chạy thử console.log(action) để xem chi tiết giá trị action truyền vào
       state.id = action.payload.id;
       state.title = action.payload.title;
-      state.first_name = action.payload.first_name;
-      state.last_name = action.payload.last_name;
+      state.fisrtName = action.payload.fisrtName;
+      state.lastname = action.payload.lastname;
       state.email = action.payload.email;
 
       state.password = action.payload.password;

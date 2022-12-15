@@ -3,7 +3,9 @@ import { Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { selectCustomer, updateCustomer } from "../../../store/userSlice";
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { NotificationManager } from 'react-notifications';
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import Sstorage from "../../../fireBaseConfig";
 
 function PersonInfor() {
     //thông báo
@@ -20,21 +22,21 @@ function PersonInfor() {
         }
     }
     //thông tin của mình
-    const { id, first_name, last_name, email, phone, address, gender, bDay } = useSelector(selectCustomer);
+    const { id, jwtToken, fisrtName, lastname, title, phone, address, url_Image } = useSelector(selectCustomer);
 
     const dispatch = useDispatch();
 
     const [infor, setInfor] = useState({
-        name: first_name + " " + last_name,
-        email: email,
+        fisrtName: fisrtName,
+        lastname: lastname,
+        title: title,
         phone: phone,
-        bDay: bDay,
         address: address,
-        gender: gender
+        url_Image: url_Image
     });
 
     const changeInfor = (e) => {
-        let a = e.target.attributes[2].value;
+        let a = e.target.attributes.id.value;
         let b = e.target.value;
         setInfor(prevState => ({
             ...prevState,    // keep all other key-value pairs
@@ -44,49 +46,74 @@ function PersonInfor() {
 
     const resetForm = () => {
         setInfor({
-            name: first_name + " " + last_name,
-            email: email,
+            name: fisrtName + " " + lastname,
+            title: title,
             phone: phone,
-            bDay: bDay,
             address: address,
-            gender: gender
+            url_Image: url_Image
         });
     }
 
 
     const saveForm = () => {
-        const fetchData = async () => {
-            const requestOptions2 = {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            };
-            const response2 = await fetch('http://localhost:3003/account/' + id, requestOptions2)
-            const data2 = await response2.json();
-            console.log(data2);
-            const requestOptions = {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(
-                    {
-                        ...data2,
-                        "first_name": `${infor.name.slice(0, infor.name.lastIndexOf(" ") - 1)}`,
-                        "last_name": `${infor.name.slice(infor.name.lastIndexOf(" "))}`,
-                        "email": `${infor.email}`,
-                        "phone": `${infor.phone}`,
-                        "address": `${infor.address}`,
-                        "gender": `${infor.gender}`,
-                        "bDay": `${infor.bDay}`
-                    }
-                )
-            };
-            const response = await fetch('http://localhost:3003/account/' + id, requestOptions)
-            const data = await response.json();
-            console.log(data);
-            dispatch(updateCustomer(data));
-            if (data !== null) createNotification('success');
-            else createNotification('error')
+        console.log(infor)
+        const fetchData = async (req, res) => {
+            try {
+                const requestOptions = {
+                    method: 'PUT',
+                    headers: {
+                        'accept': ' text/plain',
+                        'Authorization': 'Bearer ' + jwtToken,
+                        'Content-Type': ' application/json-patch+json'
+                    },
+                    body: JSON.stringify(infor)
+                };
+                const response = await fetch('https://localhost:7071/api/Account/' + id, requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        dispatch(updateCustomer(data));
+                        console.log(data);
+                        createNotification("success");
+                    });
+
+            } catch (error) {
+                createNotification("error")
+                res.send(error.stack);
+            }
         }
         fetchData();
+    }
+
+    function onImageChange(e) {
+        let file = e.target.files;
+        if (!file) {
+            alert("Please upload an image first!");
+        }
+        const storageRef = ref(Sstorage, `/avatar/${file.name}`);
+
+        // progress can be paused and resumed. It also exposes progress updates.
+        // Receives the storage reference and the file to upload.
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const percent = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+            },
+            (err) => console.log(err),
+            () => {
+                // download url
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    setInfor(prevState => ({
+                        ...prevState,    // keep all other key-value pairs
+                        url_Image: url       // update the value of specific key
+                    }))
+                });
+            }
+        );
+
     }
 
     return (
@@ -96,29 +123,34 @@ function PersonInfor() {
                 <div className="box2 box-width-2 mx-auto col d-flex justify-content-center" >
                     <div className="d-flex flex-column justify-content-between w-100 mt-3">
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="name" placeholder="Họ tên"
-                                onChange={(e) => changeInfor(e)} value={infor.name} />
-                            <label htmlFor="floatingInput" className="pr-3">Họ tên</label>
+                            <input type="file" id="avatar" name="avatar" accept="image/*"
+                                onChange={onImageChange} className="btn btn-outline-info" />
+                            <img src={infor.url_Image} alt="avatar" style={{ height: "50vh", width: "30vw" }}
+                                className="rounded-circle" />
                         </div>
-                        <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="gender" placeholder="Giới tính"
-                                onChange={(e) => changeInfor(e)} value={infor.gender} />
-                            <label htmlFor="floatingInput" className="pr-3">Giới tính</label>
+                        <div className="d-flex mb-3">
+                            <div className="form-floating">
+                                <input type="text" className="form-control me-1" id="fisrtName" placeholder="Họ tên"
+                                    onChange={(e) => changeInfor(e)} value={infor.fisrtName} />
+                                <label htmlFor="floatingInput" className="pr-3">Họ</label>
+                               
+                            </div>
+                            <div className="form-floating">
+                                <input type="text" className="form-control ms-1" id="lastname" placeholder="Họ tên"
+                                    onChange={(e) => changeInfor(e)} value={infor.lastname} />
+                                <label htmlFor="floatingInput" className="pr-3">Tên</label>
+                            </div>
                         </div>
-                        <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="bDay" placeholder="Ngày sinh"
-                                onChange={(e) => changeInfor(e)} value={infor.bDay} />
-                            <label htmlFor="floatingInput" className="pr-3">Ngày sinh</label>
-                        </div>
+
                         <div className="form-floating mb-3">
                             <input type="text" className="form-control" id="address" placeholder="Địa chỉ"
                                 onChange={(e) => changeInfor(e)} value={infor.address} />
                             <label htmlFor="floatingInput" className="pr-3">Địa chỉ</label>
                         </div>
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="email" placeholder="Email"
-                                onChange={(e) => changeInfor(e)} value={infor.email} />
-                            <label htmlFor="floatingInput" className="pr-3">Email</label>
+                            <input type="text" className="form-control" id="title" placeholder="title"
+                                onChange={(e) => changeInfor(e)} value={infor.title} />
+                            <label htmlFor="floatingInput" className="pr-3">title</label>
                         </div>
                         <div className="form-floating mb-3">
                             <input type="text" className="form-control" id="phone" placeholder="Số điện thoại"
@@ -134,7 +166,6 @@ function PersonInfor() {
                         </div>
                     </div>
                 </div>
-                <NotificationContainer />
             </Container>
         </div>
     );
