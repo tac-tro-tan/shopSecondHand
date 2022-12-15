@@ -27,13 +27,15 @@ import "./App.css";
 import TopNavbar from './componentsLanding/Nav/TopNavbar';
 import CheckOutPay from './components/user/sell/checkoutPay';
 import { NotificationContainer } from 'react-notifications';
+import React, { useEffect } from 'react';
+import ScrollToTop from './components/scroll/scrollToTop';
 
 function App() {
 
   const { title } = useSelector(selectCustomer);
-
   return (
     <Router>
+      <ScrollToTop/>
       <TopNavbar />
       <div className='minibody'>
         <Routes>

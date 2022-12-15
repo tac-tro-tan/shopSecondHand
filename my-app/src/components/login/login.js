@@ -205,10 +205,6 @@ function Login() {
                                     onSuccess={onSuccess}
                                     onFailure={onFailure}
                                 />
-                                <GoogleLogout
-                                    clientId={"732917656903-hf5ng2p9756s7g611tns6l9jq6eeqamq.apps.googleusercontent.com"}
-                                    onLogoutSuccess={onLogoutSuccess}
-                                />
                             </div>
 
                         </form>
