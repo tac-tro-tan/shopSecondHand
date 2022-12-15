@@ -1,0 +1,169 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+
+/* body {
+  margin: 0;
+  height: 100vh;
+  color: #353535;
+  font-family: "Roboto", sans-serif;
+} */
+
+#root {
+  height: 100%;
+}
+
+.btn-toggle {
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  background: #353535;
+  color: #fff;
+  text-align: center;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  display: none;
+}
+
+.sidebar-btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-btn-wrapper .sidebar-btn {
+  padding: 1px 15px;
+  border-radius: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #adadad;
+  text-decoration: none;
+  margin: 0 auto;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.sidebar-btn-wrapper .sidebar-btn span {
+  margin-left: 5px;
+  font-size: 13px;
+}
+
+.sidebar-btn-wrapper .sidebar-btn:hover {
+  color: #d8d8d8;
+}
+
+.collapsed .sidebar-btn {
+  display: inline-block;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  line-height: 40px;
+  padding: 0;
+}
+
+main {
+  padding: 24px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+main header {
+  margin-bottom: 40px;
+  border-bottom: 1px solid #efefef;
+}
+
+main header h1 {
+  display: flex;
+  align-items: center;
+  transform: translateX(-20px);
+}
+
+main footer {
+  margin-top: auto;
+  color: #888;
+  text-align: center;
+}
+
+main footer a {
+  text-decoration: none;
+  color: #888;
+}
+
+main footer a:hover {
+  text-decoration: underline;
+}
+
+.social-bagdes {
+  margin-top: 10px;
+}
+
+.social-bagdes img {
+  margin: 5px;
+}
+
+.block {
+  display: flex;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #545454;
+}
+
+.block>span {
+  margin-left: 10px;
+}
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl header h1 {
+  transform: translateX(20px);
+}
+
+.rtl .block {
+  direction: rtl;
+}
+
+.rtl .block>span {
+  margin-left: 0;
+  margin-right: 10px;
+}
+
+.rtl .sidebar-btn-wrapper .sidebar-btn span {
+  margin-left: 0;
+  margin-right: 5px;
+}
+
+.badge {
+  padding: 3px 6px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  border-radius: 15px;
+}
+
+.badge.red {
+  color: #ffffff;
+  background: #d63030;
+}
+
+.badge.gray {
+  color: #ffffff;
+  background: #777777;
+}
+
+.badge.yellow {
+  color: #000000;
+  background: #ffd331;
+}
+
+.input1 {
+  margin-right: 1rem;
+  margin-left: 1rem;
+}
