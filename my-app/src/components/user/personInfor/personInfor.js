@@ -42,6 +42,7 @@ function PersonInfor() {
             ...prevState,    // keep all other key-value pairs
             [a]: b       // update the value of specific key
         }))
+        console.log(infor.url_Image);
     }
 
     const resetForm = () => {
@@ -86,14 +87,15 @@ function PersonInfor() {
 
     function onImageChange(e) {
         let file = e.target.files;
+        console.log(file[0].name);
         if (!file) {
             alert("Please upload an image first!");
         }
-        const storageRef = ref(Sstorage, `/avatar/${file.name}`);
+        const storageRef = ref(Sstorage, `/avatar/${file[0].name}`);
 
         // progress can be paused and resumed. It also exposes progress updates.
         // Receives the storage reference and the file to upload.
-        const uploadTask = uploadBytesResumable(storageRef, file);
+        const uploadTask = uploadBytesResumable(storageRef, file[0]);
 
         uploadTask.on(
             "state_changed",
