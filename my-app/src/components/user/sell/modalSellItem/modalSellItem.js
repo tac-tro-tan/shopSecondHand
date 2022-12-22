@@ -7,14 +7,14 @@ import Sstorage from "../../../../fireBaseConfig.js";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useSelector } from "react-redux";
 import { selectCustomer } from "../../../../store/userSlice.js";
-import {  NotificationManager } from 'react-notifications';
+import { NotificationManager } from 'react-notifications';
 import Popup from "../../../deleteModal/Popup.js";
 
 function ModalSellItem({ itemProduct, add }) {
     //lấy giá trị idSP
     const location = useLocation()
     const idSP = location.pathname.replace("/chitietdonban/", "");
-    
+
     //thông báo
     const createNotification = (type) => {
         switch (type) {
@@ -264,17 +264,14 @@ function ModalSellItem({ itemProduct, add }) {
                                 <button className="btn outline btn-outline-primary me-4" onClick={() => { submitt(); createNotification('success'); }}>Lưu</button>
                             </div>
                             {add ? <></> :
-
                                 <div>
                                     <button className="btn outline btn-outline-danger" onClick={() => { handleShow(); }}>Xóa</button>
                                 </div>
-
-
                             }
                             <Popup handleDeleteTrue={deletee} handleShow={handleShow} show={show}></Popup>
 
                         </div>
-                        
+
                         <div className="box2 box-width-2 mx-auto col d-flex justify-content-center" >
                             <div className="d-flex flex-column justify-content-between w-100 mt-3">
                                 <div className="form-floating mb-3">
@@ -367,15 +364,15 @@ function ModalSellItem({ itemProduct, add }) {
                             <div>
                                 <button className="btn btn-outline-danger" onClick={deleteImages}>Loại bỏ ảnh</button>
                             </div> : null}
-                            {itemProduct.status == 2 && 
+                        {itemProduct.status == 2 &&
                             <table className="m-5" border='0' cellpadding='10' cellspacing='0' align='center'>
                                 <tr>
                                     <td align='center'><label>làm nổi bật sản phẩm có trả phí</label></td>
                                 </tr>
                                 <tr>
                                     <td align='center'>
-                                        <Link to={"/checkoutpay/"+idSP}>
-                                               <img src='https://www.paypalobjects.com/webstatic/en_AU/i/buttons/btn_paywith_primary_l.png' alt='Thanh toán bằng PayPal | Lớn' />
+                                        <Link to={"/checkoutpay/" + idSP}>
+                                            <img src='https://www.paypalobjects.com/webstatic/en_AU/i/buttons/btn_paywith_primary_l.png' alt='Thanh toán bằng PayPal | Lớn' />
                                         </Link>
                                     </td>
                                 </tr>

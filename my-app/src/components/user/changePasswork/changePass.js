@@ -11,7 +11,7 @@ function ChangePass() {
     const createNotification = (type) => {
         switch (type) {
             case 'success':
-                NotificationManager.success('đã cập nhật thông tin', 'Thành công');
+                NotificationManager.success('đã cập nhật mật khẩu', 'Thành công');
                 break;
             case 'error':
                 NotificationManager.error('đã có lỗi gì đó xảy ra', 'Thất bại', 3000);

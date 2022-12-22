@@ -264,7 +264,6 @@ function ProductDetails() {
                                     <div class="at">Vị trí:</div>
                                     <div class="as">{itemProduct.address}</div>
                                 </li>
-
                             </ul>
                         </div>
                     </div>

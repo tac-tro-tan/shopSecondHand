@@ -68,23 +68,6 @@ function Sell() {
         fetchData();
     }, [pagee])
 
-    // const [listItemSell, setlistItemSell] = useState([]);
-    // // dánh sách sản phẩm của chủ cửa hàng
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const requestOptions = {
-    //             method: 'GET'
-    //         };
-    //         const response = await fetch('http://localhost:3003/sanPham', requestOptions)
-    //         const data = await response.json();
-    //         const listItem = data.filter(a => a.id.idCustomer == idSPtoAcc)
-    //         setlistItemSell(listItem);
-    //         setTitle(listItem[0].id.titleCustomer)
-    //     }
-    //     fetchData();
-    // }, []);
-
-
     return (
         <div>
             <div className="divv">

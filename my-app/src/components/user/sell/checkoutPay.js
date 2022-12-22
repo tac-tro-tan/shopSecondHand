@@ -51,15 +51,6 @@ function Button({idSP}) {
             });
         },
         onApprove(data, actions) {
-            /**
-             * data: {
-             *   orderID: string;
-             *   payerID: string;
-             *   paymentID: string | null;
-             *   billingToken: string | null;
-             *   facilitatorAccesstoken: string;
-             * }
-             */
             return actions.order.capture({}).then((details) => {
                 // alert(
                 //     "Transaction completed by" +
@@ -129,10 +120,6 @@ function CheckOutPay() {
         }
         fetchData();
     }, []);
-
-    const handlePay = () => {
-        
-    }
 
     return (
         <div id="wrapper">

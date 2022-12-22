@@ -6,15 +6,15 @@ function Popup({ handleDeleteTrue, handleShow, show }) {
     return (
         <Modal show={show} onHide={handleShow}>
             <Modal.Header closeButton>
-                <Modal.Title>Modal heading</Modal.Title>
+                <Modal.Title>Thông báo</Modal.Title>
             </Modal.Header>
-            <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+            <Modal.Body>Bạn có chắc chắn tiếp tục không?</Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleShow}>
-                    Close
+                    không
                 </Button>
                 <Button variant="primary" onClick={()=>{handleDeleteTrue();handleShow();}}>
-                    Save Changes
+                    Có
                 </Button>
             </Modal.Footer>
         </Modal>

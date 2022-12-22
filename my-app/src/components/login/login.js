@@ -7,8 +7,24 @@ import './login.css'
 
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { gapi } from 'gapi-script';
+import { NotificationManager } from "react-notifications";
 
 function Login() {
+    //thông báo
+    const createNotification = (type) => {
+        switch (type) {
+            case 'success':
+                NotificationManager.success('Chào mừng bạn', 'Thành công');
+                break;
+            case 'info':
+                NotificationManager.info('Đăng ký thành công', 'Thành công')
+            case 'error':
+                NotificationManager.error('đã có lỗi gì đó xảy ra', 'Thất bại', 3000);
+                break;
+            default:
+                alert("kill me, i'm here");
+        }
+    }
 
     useEffect(() => {
         function start() {
@@ -57,7 +73,9 @@ function Login() {
                     .then(data => {
                         dispatch(updateCustomer(data))
                     });
+                createNotification('success')
             } catch (error) {
+                createNotification('error')
                 res.send(error.stack);
             }
         }
@@ -80,6 +98,7 @@ function Login() {
         })
         )
     }
+
     const handleSignup = () => {
         const fetchData = async (req, res) => {
             try {
@@ -96,8 +115,9 @@ function Login() {
                     .then(data => {
                         console.log(data)
                     });
-
+                createNotification('info');
             } catch (error) {
+                createNotification('error');
                 res.send(error.stack);
             }
         }
@@ -150,6 +170,7 @@ function Login() {
                     .then(data2 => {
                         dispatch(updateCustomer(data2))
                     });
+                createNotification('success')
             } catch (error) {
                 res.send(error.stack);
             }
