@@ -30,7 +30,7 @@ function ProductDetails() {
         "price": 29800000,
         "address": "Xã Vĩnh Lộc B, Huyện Bình Chánh, Tp Hồ Chí Minh",
         "phone": "9594540249",
-        "describe": "Airblade Robot 125i Đèn Led From bỏ mẫu khoá từ Xe đk cuối 2019 bản đặc biệt BLACK EDITION ONE BST dễ đọc : 59 - L2 : 324.89 - 32489 Tài Mãi Bốn Mùa Phát Lộc - 100244889",
+        "describe": "Airblade R44889",
         "status": 2,
         "image": "string",
         "created": "2022-11-21T09:52:29.9981008"
@@ -67,7 +67,8 @@ function ProductDetails() {
                     'Authorization': 'Bearer ' + jwtToken
                 }
             };
-            const response3 = await fetch('https://localhost:7071/api/Cart/get?id=' + id + '&page=0&pageSize=40', requestOptions3)
+            const response3 = await fetch('https://localhost:7071/api/Cart/get?id=' + id + '&page=0&pageSize=40',
+                requestOptions3)
             const data3 = await response3.json();
             const listId = data3.results.map(x => x.itemId);
             let k = listId.indexOf(data.id);
@@ -79,8 +80,8 @@ function ProductDetails() {
         console.log(itemProduct);
     }, []);
 
-    const formatter = new Intl.NumberFormat('vi', {style : 'currency', currency : 'VND'});
-      
+    const formatter = new Intl.NumberFormat('vi', { style: 'currency', currency: 'VND' });
+
     // nội dung
     var content = String.raw`${itemProduct.describe}`;
 
@@ -151,7 +152,6 @@ function ProductDetails() {
     let images = ii;
 
     return (
-
         <Container>
             <div class="tourTitle d-flex">
                 <div>
@@ -162,25 +162,21 @@ function ProductDetails() {
                 </div>
                 <h1>{itemProduct.name}</h1>
             </div>
-
             <div class="mod-content row">
                 <div id="vnt-main" class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                     <div id="vnt-slide-thumbnail" class="slick-init slick-initialized slick-slider">
                         <div class="slick-list draggable">
                             <div class="slick-slide slick-current slick-active so2"
                                 data-slick-index="0" aria-hidden="false">
-                                <div>
-                                    <div class="item so3 d-flex justify-content-center" >
-                                        <div className="anh mt-3  ">
-                                            <div className="slide-container">
-                                                <Zoom {...zoomOutProperties}>
-                                                    {images.map((each, index) => (
-                                                        <img className="lazy rounded" key={index}
-                                                            style={{ height: "22rem", width: "100%" }} src={each}
-                                                        />
-                                                    ))}
-                                                </Zoom>
-                                            </div>
+                                <div class="item so3 d-flex justify-content-center" >
+                                    <div className="anh mt-3">
+                                        <div className="slide-container">
+                                            <Zoom {...zoomOutProperties}>
+                                                {images.map((each, index) => (
+                                                    <img className="lazy rounded" key={index} src={each}
+                                                        style={{ height: "22rem", width: "100%" }}/>
+                                                ))}
+                                            </Zoom>
                                         </div>
                                     </div>
                                 </div>
@@ -189,7 +185,6 @@ function ProductDetails() {
                     </div>
 
                     <div class="boxTour" id="flag1">
-                        <div class="title"></div>
                         <div class="content d-flex flex-column so9">
                             <table align="left" border="0" cellpadding="10" cellspacing="10" >
                                 <tbody>
@@ -200,8 +195,8 @@ function ProductDetails() {
                                         <td>
                                             <div>
                                                 <Link to={"/danhsachbanhang/" + itemProduct.accountId}>
-                                                <button className="btn outline btn-outline-primary">
-                                                    Cửa hàng của {title}</button>
+                                                    <button className="btn outline btn-outline-primary">
+                                                        Cửa hàng của {title}</button>
                                                 </Link>
                                             </div>
                                         </td>
@@ -227,11 +222,13 @@ function ProductDetails() {
                                         <td>
                                             {chatting && <div className="p-1">
                                                 <Link to={"/chat/" + itemProduct.accountId}>
-                                                    <button className="btn outline btn-outline-primary">Chat</button>
+                                                    <button 
+                                                    className="btn outline btn-outline-primary">Chat</button>
                                                 </Link>
-                                            </div>}</td>
+                                            </div>}
+                                        </td>
                                     </tr>
-                                
+
                                     <tr>
                                         <td>&nbsp;</td>
                                         <td>&nbsp;</td>
