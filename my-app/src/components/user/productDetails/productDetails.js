@@ -86,6 +86,9 @@ function ProductDetails() {
     var content = String.raw`${itemProduct.describe}`;
 
     const changeAddCart = () => {
+        if(!id){
+            navigate("/dangnhap")
+        }
         if (addToCart) {
             const fetchData = async (req, res) => {
                 try {
@@ -221,7 +224,7 @@ function ProductDetails() {
                                         </td>
                                         <td>
                                             {chatting && <div className="p-1">
-                                                <Link to={"/chat/" + itemProduct.accountId}>
+                                                <Link to={id?"/chat/" + itemProduct.accountId:"/dangnhap"}>
                                                     <button 
                                                     className="btn outline btn-outline-primary">Chat</button>
                                                 </Link>

@@ -16,8 +16,7 @@ import {
     FaRegLaughWink,
     FaHeart
 } from "react-icons/fa";
-import "./sidebar.css"
-import MultiRangeSlider from "./multiRangeSlider";
+import "./sidebar.css";
 
 const SiderBer = ({ image, collapsed, rtl, toggled, handleToggleSidebar, clickArea, clickTopic, clickPrice }) => {
 
